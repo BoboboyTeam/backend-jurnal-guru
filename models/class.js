@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Class.hasMany(models.Jurnal, { foreignKey: 'class' });
+      Class.hasMany(models.Jurnal, { foreignKey: 'id', as: 'class' });
     }
   }
   Class.init({

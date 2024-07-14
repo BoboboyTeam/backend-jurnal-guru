@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Mapel.hasMany(models.Jurnal, { foreignKey: 'materi' });
+      Mapel.hasMany(models.Jurnal, { foreignKey: 'materi', as: 'materi' });
     }
   }
   Mapel.init({

@@ -11,11 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Jurnal.belongsTo(models.JP, { foreignKey: 'dari', as: 'jp' });
-      Jurnal.belongsTo(models.JP, { foreignKey: 'ke', as: 'jp' });
-      Jurnal.belongsTo(models.Class, { foreignKey: 'class' });
-      Jurnal.belongsTo(models.mapel, { foreignKey: 'materi' });
-      Jurnal.belongsTo(models.User, { foreignKey: 'guru' });
+      Jurnal.belongsTo(models.JP, { foreignKey: 'dari', as: 'dari' });
+      Jurnal.belongsTo(models.JP, { foreignKey: 'ke', as: 'ke' });
+      Jurnal.belongsTo(models.Class, { foreignKey: 'class', as: 'class' });
+      Jurnal.belongsTo(models.mapel, { foreignKey: 'materi', as: 'materi' });
+      Jurnal.belongsTo(models.User, { foreignKey: 'guru', as: 'guru' });
     }
   }
   Jurnal.init({

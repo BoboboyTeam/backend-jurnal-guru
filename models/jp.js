@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      JP.hasMany(models.Jurnal, { foreignKey: 'dari', as: 'jurnal' });
-      JP.hasMany(models.Jurnal, { foreignKey: 'ke', as: 'jurnal' });
+      JP.hasMany(models.Jurnal, { foreignKey: 'dari' });
+      JP.hasMany(models.Jurnal, { foreignKey: 'ke' });
     }
   }
   JP.init({
