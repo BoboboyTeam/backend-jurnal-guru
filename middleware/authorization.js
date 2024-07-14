@@ -27,4 +27,4 @@ class Authorization {
     }
 }
 
-module.exports = Authorization
+export default Authorization

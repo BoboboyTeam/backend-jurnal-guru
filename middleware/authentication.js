@@ -1,7 +1,7 @@
-import User  from '../models/user';
-import { verifyToken } from '../helpers/jwt';
+import User  from '../models/user.js';
+import { verifyToken } from '../helper/jwt.js';
 
-export const authentication = async (req, res, next) => {
+const authentication = async (req, res, next) => {
     try {
         const { authorization } = req.headers;
         if (!authorization) {
@@ -33,3 +33,5 @@ export const authentication = async (req, res, next) => {
         next(err);
     }
 };
+
+export default authentication;

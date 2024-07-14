@@ -1,8 +1,10 @@
-const { compareSync, hashSync } = require('bcryptjs')
+import pkg from 'bcryptjs';
+const { compareSync, hashSync } = pkg;
 
-module.exports = {
+export const hashPassword = (password) => {
+  return hashSync(password);
+};
 
-    hashPassword: (password) => hashSync(password, 5),
-    comparePassword: (password, password_db) => compareSync(password, password_db)
-
-}
+export const comparePassword = (password, password_db) => {
+  return compareSync(password, password_db);
+};

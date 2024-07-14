@@ -1,6 +1,10 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
+import dotenv from "dotenv";
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config();
+}
 const uri =
-  process.env.MONGO_DB || null;
+  process.env.MONGODB_URI || null;
 
 if (!uri) {
   throw new Error("MONGO_DB Connection is not provided");

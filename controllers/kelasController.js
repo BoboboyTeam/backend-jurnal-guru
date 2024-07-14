@@ -1,4 +1,4 @@
-import Kelas from "../models/kelas";
+import Kelas from "../models/kelas.js";
 
 class KelasController {
     static async findAll(req, res, next) {

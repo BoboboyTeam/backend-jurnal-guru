@@ -1,6 +1,6 @@
-import User from '../models/user';
-import { generateToken } from '../helpers/jwt';
-import { comparePassword, hashPassword } from '../helpers/bcrypt';
+import User from '../models/user.js';
+import { generateToken } from '../helper/jwt.js';
+import { comparePassword, hashPassword } from '../helper/bcrypt.js';
 
 class AuthController {
     static register = async (req, res, next) => {

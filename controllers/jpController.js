@@ -1,4 +1,4 @@
-import JP from "../models/jadwal_pelajaran";
+import JP from "../models/jadwal_pelajaran.js";
 
 class JPController {
     static async findAll(req, res, next) {
