@@ -1,1 +1,7 @@
 node_modules
+RombakControllers
+RombakMiddleware
+Rombakmigrations
+RombakModels
+rombak1.js
+.env

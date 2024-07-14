@@ -1,40 +1,50 @@
-const express = require('express')
-const router = express.Router()
+import express from 'express';
+
+const router = express.Router();
 
 // Middleware
-const {authentication} = require('../middleware/authentication')
-const Authorization = require('../middleware/authorization')
+import { authentication } from '../middleware/authentication';
+import { admin, teacher } from '../middleware/authorization';
 
 // Controller
-const ClassController = require('../controllers/classController')
-const AuthController = require('../controllers/authController')
-const JournalController = require('../controllers/journalController')
-const mapelController = require('../controllers/mapelController')
-const JPController = require('../controllers/jpController')
-const userController = require('../controllers/userController')
+import AuthController from '../controllers/AuthController';
+import UserController from '../controllers/userController';
+import JPController from '../controllers/jpController';
+import KelasController from '../controllers/kelasController';
+import { filterByNow } from '../middleware/filterByNow';
 
-// Login Register
-router.post('/login',AuthController.login)
-router.post('/register',AuthController.register)
+// Auth
+router.post('/login', AuthController.login);
+router.post('/register',authentication,admin, AuthController.register);
 
-router.use(authentication)
+// Admin
 
-// Utility
-router.get('/classes',ClassController.getAllClass)
-router.get('/mapels',mapelController.getAllMapel)
-router.get('/jps',JPController.getAllJP)
+// Users
+router.get('/users', authentication, admin, UserController.findAll);
+router.get('/users/:id', authentication, admin, UserController.findOne);
+router.post('/users', authentication, admin, UserController.create);
+router.put('/users/:id', authentication, admin, UserController.updateOne);
+router.delete('/users/:id', authentication, admin, UserController.deleteOne);
 
-// Admin Role
-router.get('/admin/journals',Authorization.admin,JournalController.getAllJournal)
-router.get('/admin/users',Authorization.admin,userController.getAllUser)
-router.post('/admin/journals',Authorization.admin,JournalController.createJournal)
-router.get('/admin/journals/:id',Authorization.admin,JournalController.getJournalById)
+// JP
+router.get('/admin/jp', authentication, admin, JPController.findAll);
+router.get('/admin/jp/:id', authentication, admin, JPController.findOne);
+router.post('/admin/jp', authentication, admin, JPController.create);
+router.put('/admin/jp/:id', authentication, admin, JPController.updateOne);
+router.delete('/admin/jp/:id', authentication, admin, JPController.deleteOne);
 
-// Teacher Role
-router.get('/teacher/journals',Authorization.teacher,JournalController.getAllJournal)
-router.post('/teacher/journals',Authorization.teacher,JournalController.createJournal)
-router.get('/teacher/journals/:id',Authorization.teacher,JournalController.getJournalById)
-router.put('/teacher/journals/:id',Authorization.teacher,JournalController.updateJournal)
-router.delete('/teacher/journals/:id',Authorization.teacher,JournalController.deleteJournal)
+// Kelas
+router.get('/admin/kelas', authentication, admin, KelasController.findAll);
+router.get('/admin/kelas/:id', authentication, admin, KelasController.findOne);
+router.post('/admin/kelas', authentication, admin, KelasController.create);
+router.put('/admin/kelas/:id', authentication, admin, KelasController.updateOne);
+router.delete('/admin/kelas/:id', authentication, admin, KelasController.deleteOne);
 
-module.exports = router
+// Teacher
+
+// JP
+router.use(filterByNow)
+router.get('/teacher/jp', authentication, teacher, JPController.findAll);
+
+
+export default router;

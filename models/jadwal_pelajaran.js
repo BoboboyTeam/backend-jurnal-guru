@@ -1,12 +1,16 @@
 import { db } from "./config/index.js";
 import { ObjectId } from "mongodb";
-export default class User {
+export default class JP {
   static col() {
-    return db.collection("users");
+    return db.collection("jp");
   }
 
   static async findAll(){
     return await this.col().find({}).toArray();
+  }
+
+  static async findAllByObj(obj){
+    return await this.col().find(obj).toArray();
   }
 
   static async findOne(obj){
@@ -16,7 +20,7 @@ export default class User {
   static async findById(id){
     return await this.col().findOne({ _id: ObjectId(id) });
   }
-
+  
   static async create(obj){
     return await this.col().insertOne(obj);
   }
@@ -28,8 +32,6 @@ export default class User {
   static async deleteOne(filter){
     return await this.col().deleteOne(filter);
   }
-
-
   
 }
 

@@ -1,5 +1,3 @@
-const {User} = require('../models/index');
-
 class Authorization {
     static async admin(req,res,next){
         try{
