@@ -10,6 +10,16 @@ class KelasController {
         }
     }
     
+    static async findAllByPage(req, res, next) {
+        try {
+        const { page, limit } = req.query;
+        const kelas = await Kelas.findAllByPage(parseInt(page), parseInt(limit));
+        res.status(200).json(kelas);
+        } catch (err) {
+        next(err);
+        }
+    }
+    
     static async findOne(req, res, next) {
         try {
         const kelas = await Kelas.findById(req.params.id);

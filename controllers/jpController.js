@@ -3,9 +3,7 @@ import JP from "../models/jadwal_pelajaran.js";
 class JPController {
     static async findAll(req, res, next) {
         try {
-        
         const jp = await JP.findAll();
-        
         res.status(200).json(jp);
         } catch (err) {
         next(err);
@@ -15,6 +13,16 @@ class JPController {
     static async findOne(req, res, next) {
         try {
         const jp = await JP.findById(req.params.id);
+        res.status(200).json(jp);
+        } catch (err) {
+        next(err);
+        }
+    }
+
+    static async findAllByPage(req, res, next) {
+        try {
+        const { page, limit } = req.query;
+        const jp = await JP.findAllByPage(parseInt(page), parseInt(limit));
         res.status(200).json(jp);
         } catch (err) {
         next(err);

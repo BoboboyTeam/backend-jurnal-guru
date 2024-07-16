@@ -9,6 +9,15 @@ export default class User {
     return await this.col().find({}).toArray();
   }
 
+  static async findAllByObj(obj){
+    return await this.col().find(obj).toArray();
+  }
+
+  static async findAllByPage(page, limit){
+    return await this.col().find({}).skip((page - 1) * limit).limit(limit).toArray
+();
+  }
+
   static async findOne(obj){
     return await this.col().findOne(obj);
   }

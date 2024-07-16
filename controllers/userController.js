@@ -19,6 +19,16 @@ class UserController {
         }
     }
 
+    static async findAllByPage(req, res, next) {
+        try {
+            const { page, limit } = req.query;
+            const users = await User.findAllByPage(parseInt(page), parseInt(limit));
+            res.status(200).json(users);
+        } catch (err) {
+            next(err);
+        }
+    }
+
     static async create(req, res, next) {
         try {
             const { name, email, password, role } = req.body;
