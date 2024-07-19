@@ -10,6 +10,7 @@ import KelasController from '../controllers/kelasController.js';
 import { filterByNow } from '../middleware/filterByNow.js';
 
 import express from 'express';
+import JurnalGuruController from '../controllers/jurnalGuruController.js';
 
 const router = express.Router();
 
@@ -41,11 +42,26 @@ router.post('/admin/kelas', authentication, Authorization.admin, KelasController
 router.put('/admin/kelas/:id', authentication, Authorization.admin, KelasController.updateOne);
 router.delete('/admin/kelas/:id', authentication, Authorization.admin, KelasController.deleteOne);
 
+// Jurnal Guru
+router.get('/admin/jurnal-guru', authentication, Authorization.admin, JurnalGuruController.findAllByTeacher);
+router.get('/admin/jurnal-guru/:id', authentication, Authorization.admin, JurnalGuruController.findOne);
+router.post('/admin/jurnal-guru', authentication, Authorization.admin, JurnalGuruController.create);
+router.put('/admin/jurnal-guru/:id', authentication, Authorization.admin, JurnalGuruController.updateOne);
+router.delete('/admin/jurnal-guru/:id', authentication, Authorization.admin, JPController.deleteOne);
+
+
 // Teacher
 
 // JP
 router.use(filterByNow)
-router.get('/teacher/jp', authentication, Authorization.teacher, JPController.findAll);
+router.get('/teacher/jp', authentication, Authorization.teacher, JurnalGuruController.findAll);
+
+// Jurnal Guru
+router.get('/teacher/jurnal-guru', authentication, Authorization.teacher, JurnalGuruController.findAll);
+router.get('/teacher/jurnal-guru/:id', authentication, Authorization.teacher, JurnalGuruController.findOne);
+router.post('/teacher/jurnal-guru', authentication, Authorization.teacher, JurnalGuruController.create);
+router.put('/teacher/jurnal-guru/:id', authentication, Authorization.teacher, JurnalGuruController.updateOne);
+router.delete('/teacher/jurnal-guru/:id', authentication, Authorization.teacher, JPController.deleteOne);
 
 
 export default router;

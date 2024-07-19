@@ -29,7 +29,7 @@ class AuthController {
                 name,
                 email,
                 password: hashPassword(password),
-                role,
+                role: role.toLowerCase(),
             });
             res.status(201).json({
                 id: user.id,

@@ -3,8 +3,8 @@ import User from '../models/user.js';
 class UserController {
     static async findAll(req, res, next) {
         try {
-            const users = await User.findAll();
-            res.status(200).json(users);
+            const user = await User.findAll();
+            return user ? res.status(200).json(user): res.status(404).json({ message: 'Data not found' });
         } catch (err) {
             next(err);
         }
@@ -13,7 +13,7 @@ class UserController {
     static async findOne(req, res, next) {
         try {
             const user = await User.findOne({ _id: req.params.id });
-            res.status(200).json(user);
+            return user ? res.status(200).json(user): res.status(404).json({ message: 'Data not found' });
         } catch (err) {
             next(err);
         }
@@ -29,7 +29,7 @@ class UserController {
                 name,
                 email,
                 password,
-                role,
+                role: role.toLowerCase(),
             });
             res.status(201).json(user);
         } catch (err) {
@@ -42,7 +42,7 @@ class UserController {
             const filter = { _id: req.params.id };
             const update = { $set: req.body };
             const user = await User.updateOne(filter, update);
-            res.status(200).json(user);
+            return user ? res.status(200).json(user): res.status(404).json({ message: 'Data not found' });
         } catch (err) {
             next(err);
         }
@@ -52,7 +52,7 @@ class UserController {
         try {
             const filter = { _id: req.params.id };
             const user = await User.deleteOne(filter);
-            res.status(200).json(user);
+            return user ? res.status(200).json(user): res.status(404).json({ message: 'Data not found' });
         } catch (err) {
             next(err);
         }

@@ -1,8 +1,8 @@
 import { db } from "./config/index.js";
 import { ObjectId } from "mongodb";
-export default class JP {
+export default class JurnalGuru {
   static col() {
-    return db.collection("jp");
+    return db.collection("jurnal_guru");
   }
 
   static async findAll(){
@@ -19,13 +19,6 @@ export default class JP {
 
   static async findById(id){
     return await this.col().findOne({ _id: ObjectId(id) });
-  }
-
-  static async findByObjId(obj){
-    if (obj._id){
-      obj._id = ObjectId(obj._id);
-    }
-    return await this.col().findOne(obj);
   }
   
   static async create(obj){
