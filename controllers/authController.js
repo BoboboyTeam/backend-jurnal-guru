@@ -31,7 +31,7 @@ class AuthController {
                 password: hashPassword(password),
                 role: role.toLowerCase(),
             });
-            res.status(201).json({
+            return res.status(201).json({
                 id: user.id,
                 email: user.email,
                 role: user.role,
@@ -51,15 +51,15 @@ class AuthController {
                 case !password:
                     throw { msg: 'Password Is Empty' };
             }
-
             const user = await User.findOne({ email:  email  });
+            console.log(comparePassword( password,user.password));
 
             if (!user) {
                 throw { msg: 'User Not Found' };
             } else {
-                if (comparePassword(user.password, password)) {
+                if (comparePassword(password,user.password,)) {
                     const access_token = generateToken({ id: user.id });
-                    res.status(200).json({ access_token });
+                    return res.status(200).json({ access_token });
                 } else {
                     throw { msg: 'Invalid Email Password' };
                 }

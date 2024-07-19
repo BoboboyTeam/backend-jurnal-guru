@@ -1,4 +1,4 @@
-import JurnalGuru from "../models/jurnal_guru";
+import JurnalGuru from "../models/jurnal_guru.js";
 
 export default class JurnalGuruController {
     static async findAll(req, res, next) {

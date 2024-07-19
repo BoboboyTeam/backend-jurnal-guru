@@ -14,6 +14,8 @@ import JurnalGuruController from '../controllers/jurnalGuruController.js';
 
 const router = express.Router();
 
+router.post('/pub/register', AuthController.register);
+
 
 // Auth
 router.post('/login', AuthController.login);
@@ -43,7 +45,7 @@ router.put('/admin/kelas/:id', authentication, Authorization.admin, KelasControl
 router.delete('/admin/kelas/:id', authentication, Authorization.admin, KelasController.deleteOne);
 
 // Jurnal Guru
-router.get('/admin/jurnal-guru', authentication, Authorization.admin, JurnalGuruController.findAllByTeacher);
+router.get('/admin/jurnal-guru', authentication, Authorization.admin, JurnalGuruController.findAll);
 router.get('/admin/jurnal-guru/:id', authentication, Authorization.admin, JurnalGuruController.findOne);
 router.post('/admin/jurnal-guru', authentication, Authorization.admin, JurnalGuruController.create);
 router.put('/admin/jurnal-guru/:id', authentication, Authorization.admin, JurnalGuruController.updateOne);
