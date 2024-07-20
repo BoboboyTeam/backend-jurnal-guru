@@ -18,12 +18,12 @@ export default class JP {
   }
 
   static async findById(id){
-    return await this.col().findOne({ _id: ObjectId(id) });
+    return await this.col().findOne({ _id:new ObjectId(id) });
   }
 
   static async findByObjId(obj){
     if (obj._id){
-      obj._id = ObjectId(obj._id);
+      obj._id =new ObjectId(obj._id);
     }
     return await this.col().findOne(obj);
   }

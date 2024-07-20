@@ -4,8 +4,14 @@
   "description": "Backend Sekolah",
   "main": "index.js",
   "type": "module",
+  "jest": {
+    "transform": {
+      "^.+\\.js?$": "babel-jest"
+    }
+  },
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "nodemon ./bin/www",
+    "test": "jest --coverage"
   },
   "keywords": [],
   "author": "",

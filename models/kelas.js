@@ -13,7 +13,7 @@ export default class Kelas {
   }
 
   static async findById(id){
-    return await this.col().findOne({ _id: ObjectId(id) });
+    return await this.col().findOne({ _id:new ObjectId(id) });
   }
 
   

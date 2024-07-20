@@ -4,6 +4,7 @@ const secret = process.env.JWT_SECRET;
 
 // Generate a JWT
 export function generateToken(payload) {
+    console.log(payload)
     return jwt.sign(payload, secret, { expiresIn: '6h' });
 }
 

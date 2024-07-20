@@ -21,12 +21,12 @@ class KelasController {
     
     static async create(req, res, next) {
         try {
-        const { name, mentor, students } = req.body;
-        if (!name || !mentor || !students) {
+        const { nama, mentor, students } = req.body;
+        if (!nama || !mentor || !students) {
             throw { msg: "Data Is Not Complete" };
         }
         const kelas = await Kelas.create({
-            name,
+            nama,
             mentor,
             students,
         });

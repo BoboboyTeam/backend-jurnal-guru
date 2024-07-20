@@ -5,7 +5,7 @@ class JPController {
         try {
         if (req.user.role === 'admin') {
             const jp = await JP.findAll();
-            return jp ? res.status(200).json(jp) : res.status(404).json({ message: 'Data not found' });
+            return jp.length > 0 ? res.status(200).json(jp) : res.status(404).json({ message: 'Data not found' });
         }
         else if (req.user.role === 'teacher') {
             const jp = await JP.findAllByObj({guru:req.user.username});
@@ -20,6 +20,7 @@ class JPController {
     static async findOne(req, res, next) {
         try {
         const jp = await JP.findById(req.params.id);
+        console.log(!jp);
         return jp ? res.status(200).json(jp) : res.status(404).json({ message: 'Data not found' });
         } catch (err) {
         next(err);
@@ -42,6 +43,8 @@ class JPController {
             jumlahJP
         });
 
+        
+
         res.status(201).json(jp);
         } catch (err) {
         next(err);
@@ -63,6 +66,7 @@ class JPController {
         try {
         const filter = { _id: req.params.id };
         const jp = await JP.deleteOne(filter);
+        
         return jp ? res.status(200).json(jp) : res.status(404).json({ message: 'Data not found' });
         } catch (err) {
         next(err);

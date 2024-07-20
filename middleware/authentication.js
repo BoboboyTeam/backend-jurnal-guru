@@ -5,21 +5,21 @@ const authentication = async (req, res, next) => {
     try {
         const { authorization } = req.headers;
         if (!authorization) {
-            throw { name: 'Invalid Token' };
+            throw { nama: 'Invalid Token' };
         } else {
             const [type, access_token] = authorization.split(' ');
 
             if (type !== 'Bearer') {
-                throw { name: 'Invalid Token' };
+                throw { nama: 'Invalid Token' };
             }
             const { id } = verifyToken(access_token);
-
+            console.log(JSON.stringify(verifyToken(access_token)))
             if (!id) {
-                throw { name: 'AuthenticationFailed' };
+                throw { nama: 'AuthenticationFailed' };
             } else {
-                const user = await User.findByPk(id);
+                const user = await User.findById(id);
                 if (!user) {
-                    throw { name: 'User Not Found' };
+                    throw { nama: 'User Not Found' };
                 } else {
                     req.user = {
                         id: user.id,

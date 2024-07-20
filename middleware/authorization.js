@@ -5,7 +5,7 @@ class Authorization {
                 next()
             }
             else{
-                throw {name: 'User is not admin'}
+                throw {nama: 'User is not admin'}
             }
         }
         catch(err){
@@ -18,7 +18,7 @@ class Authorization {
                 next()
             }
             else{
-                throw {name: 'User is not teacher'}
+                throw {nama: 'User is not teacher'}
             }
         }
         catch(err){

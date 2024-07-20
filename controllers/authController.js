@@ -5,10 +5,10 @@ import { comparePassword, hashPassword } from '../helper/bcrypt.js';
 class AuthController {
     static register = async (req, res, next) => {
         try {
-            const { name, email, password, role } = req.body;
+            const { nama, email, password, role } = req.body;
             
             switch (true) {
-                case !name:
+                case !nama:
                     throw { msg: 'Name Is Empty' };
                 case !email:
                     throw { msg: 'Email Is Empty' };
@@ -26,7 +26,7 @@ class AuthController {
             }
 
             const user = await User.create({
-                name,
+                nama,
                 email,
                 password: hashPassword(password),
                 role: role.toLowerCase(),
@@ -58,7 +58,7 @@ class AuthController {
                 throw { msg: 'User Not Found' };
             } else {
                 if (comparePassword(password,user.password,)) {
-                    const access_token = generateToken({ id: user.id });
+                    const access_token = generateToken({ id: user._id });
                     return res.status(200).json({ access_token });
                 } else {
                     throw { msg: 'Invalid Email Password' };

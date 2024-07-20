@@ -11,6 +11,7 @@ import { filterByNow } from '../middleware/filterByNow.js';
 
 import express from 'express';
 import JurnalGuruController from '../controllers/jurnalGuruController.js';
+import errHandler from '../middleware/errorHandling.js';
 
 const router = express.Router();
 
@@ -65,5 +66,6 @@ router.post('/teacher/jurnal-guru', authentication, Authorization.teacher, Jurna
 router.put('/teacher/jurnal-guru/:id', authentication, Authorization.teacher, JurnalGuruController.updateOne);
 router.delete('/teacher/jurnal-guru/:id', authentication, Authorization.teacher, JPController.deleteOne);
 
+router.use(errHandler);
 
 export default router;
