@@ -7,7 +7,7 @@ class JPController {
             const jp = await JP.findAll();
             return jp.length > 0 ? res.status(200).json(jp) : res.status(404).json({ message: 'Data not found' });
         }
-        else if (req.user.role === 'teacher') {
+        else if (req.user.role === 'guru') {
             const jp = await JP.findAllByObj({guru:req.user.username});
             return jp ? res.status(200).json(jp) : res.status(404).json({ message: 'Data not found' });
         }
@@ -42,8 +42,6 @@ class JPController {
             materi,
             jumlahJP
         });
-
-        
 
         res.status(201).json(jp);
         } catch (err) {

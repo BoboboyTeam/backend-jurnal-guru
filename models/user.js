@@ -8,6 +8,9 @@ export default class User {
   static async findAll(){
     return await this.col().find({}).toArray();
   }
+  static async findAllByRole(role){
+    return await this.col().find({ role }).toArray();
+  }
 
   static async findOne(obj){
     return await this.col().findOne(obj);

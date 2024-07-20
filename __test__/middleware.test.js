@@ -47,7 +47,7 @@ describe('Middleware', () => {
     });
 
     it('should authorize a teacher', async () => {
-      const req = { user: { role: 'teacher' } };
+      const req = { user: { role: 'guru' } };
       const res = {};
       const next = jest.fn();
 

@@ -14,7 +14,7 @@ class Authorization {
     }
     static async teacher(req,res,next){
         try{
-            if(req.user.role === 'teacher'){
+            if(req.user.role === 'guru'){
                 next()
             }
             else{

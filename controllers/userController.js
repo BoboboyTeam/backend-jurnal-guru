@@ -9,6 +9,14 @@ class UserController {
             next(err);
         }
     }
+    static async findAllByRole(req, res, next) {
+        try {
+            const user = await User.findAllByRole(req.params.role);
+            return user ? res.status(200).json(user): res.status(404).json({ message: 'Data not found' });
+        } catch (err) {
+            next(err);
+        }
+    }
 
     static async findOne(req, res, next) {
         try {

@@ -17,13 +17,13 @@ const router = express.Router();
 
 router.post('/pub/register', AuthController.register);
 
-
 // Auth
 router.post('/login', AuthController.login);
 router.post('/register',authentication,Authorization.admin, AuthController.register);
 
 // Admin
-
+// Get Guru
+router.get('/users/:role', authentication, Authorization.admin, UserController.findAllByRole);
 // Users
 router.get('/users', authentication, Authorization.admin, UserController.findAll);
 router.get('/users/:id', authentication, Authorization.admin, UserController.findOne);
@@ -64,7 +64,7 @@ router.get('/teacher/jurnal-guru', authentication, Authorization.teacher, Jurnal
 router.get('/teacher/jurnal-guru/:id', authentication, Authorization.teacher, JurnalGuruController.findOne);
 router.post('/teacher/jurnal-guru', authentication, Authorization.teacher, JurnalGuruController.create);
 router.put('/teacher/jurnal-guru/:id', authentication, Authorization.teacher, JurnalGuruController.updateOne);
-router.delete('/teacher/jurnal-guru/:id', authentication, Authorization.teacher, JPController.deleteOne);
+router.delete('/teacher/jurnal-guru/:id', authentication, Authorization.teacher, JurnalGuruController.deleteOne);
 
 router.use(errHandler);
 
