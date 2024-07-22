@@ -33,10 +33,10 @@ describe('Routes', () => {
     expect(response.status).toBe(200);
   });
 
-  it('should get all JPs for teacher', async () => {
+  it('should get all JPs for guru', async () => {
     const response = await request(app)
-      .get('/teacher/jp')
-      .set('Authorization', 'Bearer teacher_token');
+      .get('/guru/jp')
+      .set('Authorization', 'Bearer guru_token');
     expect(response.status).toBe(200);
   });
 

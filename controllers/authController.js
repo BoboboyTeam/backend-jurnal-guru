@@ -20,7 +20,6 @@ class AuthController {
             
             const checkUser = await User.findOne({ email:email });
 
-
             if (checkUser) {
                 throw { msg: 'Email Already Exist' };
             }
@@ -32,9 +31,8 @@ class AuthController {
                 role: role.toLowerCase(),
             });
             return res.status(201).json({
-                id: user.id,
-                email: user.email,
-                role: user.role,
+                email: email,
+                role: role,
             });
         } catch (err) {
             next(err);
@@ -59,7 +57,7 @@ class AuthController {
             } else {
                 if (comparePassword(password,user.password,)) {
                     const access_token = generateToken({ id: user._id });
-                    return res.status(200).json({ access_token });
+                    return res.status(200).json({ access_token, role: user.role ,nama: user.nama});
                 } else {
                     throw { msg: 'Invalid Email Password' };
                 }

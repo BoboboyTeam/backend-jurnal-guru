@@ -12,13 +12,13 @@ class Authorization {
             next(err)
         }
     }
-    static async teacher(req,res,next){
+    static async guru(req,res,next){
         try{
             if(req.user.role === 'guru'){
                 next()
             }
             else{
-                throw {nama: 'User is not teacher'}
+                throw {nama: 'User is not guru'}
             }
         }
         catch(err){

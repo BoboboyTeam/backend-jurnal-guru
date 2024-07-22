@@ -4,11 +4,12 @@ class JPController {
     static async findAll(req, res, next) {
         try {
         if (req.user.role === 'admin') {
+
             const jp = await JP.findAll();
             return jp.length > 0 ? res.status(200).json(jp) : res.status(404).json({ message: 'Data not found' });
         }
         else if (req.user.role === 'guru') {
-            const jp = await JP.findAllByObj({guru:req.user.username});
+            const jp = await JP.findAllByGuruAndHari(req.user.nama, req.user.hari);
             return jp ? res.status(200).json(jp) : res.status(404).json({ message: 'Data not found' });
         }
 
@@ -29,14 +30,14 @@ class JPController {
 
     static async create(req, res, next) {
         try {
-        const { hari, mapel, kelas, jamKe, mataPelajaran, guru, guruPengganti, materi, jumlahJP } = req.body;
+        const { hari, mapel, kelas, jamKe, guru, guruPengganti, materi, jumlahJP } = req.body;
         
         const jp = await JP.create({
             hari,
             mapel,
             kelas,
             jamKe,
-            mataPelajaran,
+        
             guru,
             guruPengganti,
             materi,

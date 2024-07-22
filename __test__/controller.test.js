@@ -15,11 +15,11 @@ describe('JPController', () => {
       expect(response.body).toEqual([{ _id: "669b037f81450a82e1bd2bd2", nama: 'JP1' }]);
     });
 
-    it('should return all JP for teacher', async () => {
+    it('should return all JP for guru', async () => {
       JP.findAllByObj.mockResolvedValue([{ _id: "669b037f81450a82e1bd2bd2", nama: 'JP1' }]);
       const response = await request(app)
-        .get('/teacher/jp')
-        .set('Authorization', 'Bearer teacher_token');
+        .get('/guru/jp')
+        .set('Authorization', 'Bearer guru_token');
       expect(response.status).toBe(200);
       expect(response.body).toEqual([{ _id: "669b037f81450a82e1bd2bd2", nama: 'JP1' }]);
     });

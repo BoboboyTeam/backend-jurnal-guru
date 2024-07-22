@@ -7,15 +7,19 @@ import AuthController from '../controllers/AuthController.js';
 import UserController from '../controllers/userController.js';
 import JPController from '../controllers/jpController.js';
 import KelasController from '../controllers/kelasController.js';
-import { filterByNow } from '../middleware/filterByNow.js';
+import { filterByDay } from '../middleware/filterByDay.js';
 
 import express from 'express';
 import JurnalGuruController from '../controllers/jurnalGuruController.js';
 import errHandler from '../middleware/errorHandling.js';
+import filterByRange from '../middleware/filterByRange.js';
 
 const router = express.Router();
 
 router.post('/pub/register', AuthController.register);
+router.get('/get-role', authentication,(req,res)=>{
+    res.status(200).json({role: req.user.role});
+})
 
 // Auth
 router.post('/login', AuthController.login);
@@ -32,15 +36,15 @@ router.put('/users/:id', authentication, Authorization.admin, UserController.upd
 router.delete('/users/:id', authentication, Authorization.admin, UserController.deleteOne);
 
 // JP
-router.get('/admin/jp', authentication, Authorization.admin, JPController.findAll);
+router.get('/admin/jp',filterByDay, authentication, Authorization.admin, JPController.findAll);
 router.get('/admin/jp/:id', authentication, Authorization.admin, JPController.findOne);
 router.post('/admin/jp', authentication, Authorization.admin, JPController.create);
 router.put('/admin/jp/:id', authentication, Authorization.admin, JPController.updateOne);
 router.delete('/admin/jp/:id', authentication, Authorization.admin, JPController.deleteOne);
 
 // Kelas
-router.get('/admin/kelas', authentication, Authorization.admin, KelasController.findAll);
-router.get('/admin/kelas/:id', authentication, Authorization.admin, KelasController.findOne);
+router.get('/kelas', KelasController.findAll);
+router.get('/kelas/:id', KelasController.findOne);
 router.post('/admin/kelas', authentication, Authorization.admin, KelasController.create);
 router.put('/admin/kelas/:id', authentication, Authorization.admin, KelasController.updateOne);
 router.delete('/admin/kelas/:id', authentication, Authorization.admin, KelasController.deleteOne);
@@ -53,18 +57,19 @@ router.put('/admin/jurnal-guru/:id', authentication, Authorization.admin, Jurnal
 router.delete('/admin/jurnal-guru/:id', authentication, Authorization.admin, JPController.deleteOne);
 
 
-// Teacher
+// guru
 
 // JP
-router.use(filterByNow)
-router.get('/teacher/jp', authentication, Authorization.teacher, JurnalGuruController.findAll);
+router.get('/guru/jp', filterByDay,authentication, Authorization.guru, JPController.findAll);
 
 // Jurnal Guru
-router.get('/teacher/jurnal-guru', authentication, Authorization.teacher, JurnalGuruController.findAll);
-router.get('/teacher/jurnal-guru/:id', authentication, Authorization.teacher, JurnalGuruController.findOne);
-router.post('/teacher/jurnal-guru', authentication, Authorization.teacher, JurnalGuruController.create);
-router.put('/teacher/jurnal-guru/:id', authentication, Authorization.teacher, JurnalGuruController.updateOne);
-router.delete('/teacher/jurnal-guru/:id', authentication, Authorization.teacher, JurnalGuruController.deleteOne);
+router.get('/guru/jurnal-guru', filterByRange,authentication, Authorization.guru, JurnalGuruController.findAll);
+router.get('/guru/jurnal-guru/:id', filterByRange,authentication, Authorization.guru, JurnalGuruController.findOne);
+router.post('/guru/jurnal-guru', filterByRange,authentication, Authorization.guru, JurnalGuruController.create);
+router.put('/guru/jurnal-guru/:id', filterByRange,authentication, Authorization.guru, JurnalGuruController.updateOne);
+router.delete('/guru/jurnal-guru/:id', filterByRange,authentication, Authorization.guru, JurnalGuruController.deleteOne);
+
+// Error Handler
 
 router.use(errHandler);
 

@@ -12,6 +12,9 @@ export default class JurnalGuru {
   static async findAllByObj(obj){
     return await this.col().find(obj).toArray();
   }
+  static async findAllByGuru(guru){
+    return await this.col().find({ "guru.nama": { $regex: ""+guru, $options: "i" } }).toArray();
+  }
 
   static async findOne(obj){
     return await this.col().findOne(obj);
@@ -26,6 +29,10 @@ export default class JurnalGuru {
   }
 
   static async updateOne(filter, update){
+    if (filter._id){
+      filter._id = new ObjectId(filter._id);
+    
+    }
     return await this.col().updateOne(filter, update);
   }
 

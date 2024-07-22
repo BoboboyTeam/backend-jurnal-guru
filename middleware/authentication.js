@@ -21,8 +21,8 @@ const authentication = async (req, res, next) => {
                 if (!user) {
                     throw { nama: 'User Not Found' };
                 } else {
-                    req.user = {
-                        id: user.id,
+                    req.user = {...req.user,
+                        id: user._id,
                         role: user.role,
                     };
                     next();

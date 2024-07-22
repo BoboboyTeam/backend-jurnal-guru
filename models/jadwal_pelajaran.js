@@ -12,6 +12,9 @@ export default class JP {
   static async findAllByObj(obj){
     return await this.col().find(obj).toArray();
   }
+  static async findAllByGuruAndHari(guru, hari){
+    return await this.col().find({ "guru.nama": { $regex: ""+guru, $options: "i" }, "hari": { $regex: ""+hari, $options: "i" } }).toArray();
+  }
 
   static async findOne(obj){
     return await this.col().findOne(obj);

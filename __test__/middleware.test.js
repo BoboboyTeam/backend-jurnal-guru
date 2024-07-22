@@ -46,22 +46,22 @@ describe('Middleware', () => {
       expect(next).toHaveBeenCalledWith(expect.objectContaining({ nama: 'User is not admin' }));
     });
 
-    it('should authorize a teacher', async () => {
+    it('should authorize a guru', async () => {
       const req = { user: { role: 'guru' } };
       const res = {};
       const next = jest.fn();
 
-      await Authorization.teacher(req, res, next);
+      await Authorization.guru(req, res, next);
       expect(next).toHaveBeenCalled();
     });
 
-    it('should not authorize a non-teacher', async () => {
+    it('should not authorize a non-guru', async () => {
       const req = { user: { role: 'user' } };
       const res = {};
       const next = jest.fn();
 
-      await Authorization.teacher(req, res, next);
-      expect(next).toHaveBeenCalledWith(expect.objectContaining({ nama: 'User is not teacher' }));
+      await Authorization.guru(req, res, next);
+      expect(next).toHaveBeenCalledWith(expect.objectContaining({ nama: 'User is not guru' }));
     });
   });
 });
