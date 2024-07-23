@@ -23,6 +23,7 @@ const authentication = async (req, res, next) => {
                 } else {
                     req.user = {...req.user,
                         id: user._id,
+                        nama: user.nama,
                         role: user.role,
                     };
                     next();

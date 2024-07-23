@@ -63,11 +63,12 @@ router.delete('/admin/jurnal-guru/:id', authentication, Authorization.admin, JPC
 router.get('/guru/jp', filterByDay,authentication, Authorization.guru, JPController.findAll);
 
 // Jurnal Guru
-router.get('/guru/jurnal-guru', filterByRange,authentication, Authorization.guru, JurnalGuruController.findAll);
-router.get('/guru/jurnal-guru/:id', filterByRange,authentication, Authorization.guru, JurnalGuruController.findOne);
-router.post('/guru/jurnal-guru', filterByRange,authentication, Authorization.guru, JurnalGuruController.create);
-router.put('/guru/jurnal-guru/:id', filterByRange,authentication, Authorization.guru, JurnalGuruController.updateOne);
-router.delete('/guru/jurnal-guru/:id', filterByRange,authentication, Authorization.guru, JurnalGuruController.deleteOne);
+router.get('/guru/jurnal-guru/now',filterByRange,authentication, Authorization.guru, JurnalGuruController.findNow);
+router.get('/guru/jurnal-guru',authentication, Authorization.guru, JurnalGuruController.findAll);
+router.get('/guru/jurnal-guru/:id',authentication, Authorization.guru, JurnalGuruController.findOne);
+router.post('/guru/jurnal-guru',authentication, Authorization.guru, JurnalGuruController.create);
+router.put('/guru/jurnal-guru/:id',authentication, Authorization.guru, JurnalGuruController.updateOne);
+router.delete('/guru/jurnal-guru/:id',authentication, Authorization.guru, JurnalGuruController.deleteOne);
 
 // Error Handler
 

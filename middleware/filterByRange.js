@@ -9,6 +9,7 @@ const filterByRange = (req, res, next) => {
     req.user = {
         ...req.user,
         startDate,
+        endDate
     }
     // console.log(startDate);
     // console.log(endDate);

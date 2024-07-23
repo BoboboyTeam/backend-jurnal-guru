@@ -46,6 +46,20 @@ export default class JurnalGuruController {
     }
   }
 
+  static async findNow(req, res, next) {
+    try {
+      const startDate = req.user.startDate;
+      const endDate = req.user.endDate;
+      const guru = req.user.nama;
+      const jurnalGuru = await JurnalGuru.findAllByGuruNow(guru,startDate, endDate);
+      return jurnalGuru.length > 0
+        ? res.status(200).json(jurnalGuru)
+        : res.status(404).json({ message: "Data not found" });
+    } catch (err) {
+      next(err);
+    }
+  }
+
   static async findAllByGuru(req, res, next) {
     try {
       const jurnalGuru = await JurnalGuru.findAllByGuru(req.params.guru);
