@@ -12,6 +12,8 @@ const authentication = async (req, res, next) => {
             if (type !== 'Bearer') {
                 throw { nama: 'Invalid Token' };
             }
+            console.log(access_token,"<<<<<<<ACCESS TOKEN")
+            console.log(verifyToken(access_token),"<<<<<<<<<<<<<<")
             const { id } = verifyToken(access_token);
             console.log(JSON.stringify(verifyToken(access_token)))
             if (!id) {

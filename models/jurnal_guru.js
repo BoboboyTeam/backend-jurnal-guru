@@ -17,8 +17,9 @@ export default class JurnalGuru {
       .find({ "guru.nama": { $regex: "" + guru, $options: "i" } })
       .toArray();
   }
-  static async findAllByGuruNow(guru, startDate, endDate) {
+  static async findAllByGuruDateRange(guru, startDate, endDate) {
     console.log(startDate);
+    console.log(endDate);
     return await this.col()
       .find({
         "guru.nama": { $regex: "" + guru, $options: "i" },

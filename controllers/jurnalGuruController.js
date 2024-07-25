@@ -12,14 +12,18 @@ export default class JurnalGuruController {
           return jurnalGuru.length > 0
             ? res.status(200).json(jurnalGuru)
             : res.status(404).json({ message: "Data not found" });
-        } else if (req.query.kelas) {
+        } 
+        
+        else if (req.query.kelas) {
           const jurnalGuru = await JurnalGuru.findAllByObj({
             kelas: req.query.kelas,
           });
           return jurnalGuru.length > 0
             ? res.status(200).json(jurnalGuru)
             : res.status(404).json({ message: "Data not found" });
-        } else if (req.query.hari) {
+        } 
+        
+        else if (req.query.hari) {
           const jurnalGuru = await JurnalGuru.findAllByObj({
             hari: req.query.hari,
           });
@@ -46,12 +50,42 @@ export default class JurnalGuruController {
     }
   }
 
+  static async findAllByRangeDate(req, res, next) {
+  try {
+    const month = req.query.month | new Date().getMonth();
+    const year = req.query.year | new Date().getFullYear();
+    
+    const startDate = new Date(year, month, 2);
+    const endDate = new Date(year, month+1, 0);
+
+    const guru = req.user.role === "admin" ? req.query.guru : req.user.nama;
+    console.log(guru);
+    const jurnalGuru = await JurnalGuru.findAllByGuruDateRange(guru, startDate, endDate);
+
+    let totalJP = 0;
+    jurnalGuru.forEach((jurnal) => {
+      totalJP += parseInt(jurnal.jumlahJP);
+    });
+    const gaji = totalJP * 8000;
+
+    return jurnalGuru.length > 0 ? res.status(200).json({
+      totalJP,
+      gaji,
+      data:jurnalGuru,
+    }) : res.status(404).json({ message: "Data not found" });
+
+  } catch (error) {
+    next(error)
+  }
+  
+  }
+
   static async findNow(req, res, next) {
     try {
       const startDate = req.user.startDate;
       const endDate = req.user.endDate;
       const guru = req.user.nama;
-      const jurnalGuru = await JurnalGuru.findAllByGuruNow(guru,startDate, endDate);
+      const jurnalGuru = await JurnalGuru.findAllByGuruDateRange(guru,startDate, endDate);
       return jurnalGuru.length > 0
         ? res.status(200).json(jurnalGuru)
         : res.status(404).json({ message: "Data not found" });
@@ -73,6 +107,7 @@ export default class JurnalGuruController {
 
   static async findOne(req, res, next) {
     try {
+      
       const jurnalGuru = await JurnalGuru.findById(req.params.id);
       return jurnalGuru
         ? res.status(200).json(jurnalGuru)

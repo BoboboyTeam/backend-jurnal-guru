@@ -25,10 +25,16 @@ export default class User {
   }
 
   static async updateOne(filter, update){
+    if (filter._id){
+      filter._id = new ObjectId(filter._id);
+    }
     return await this.col().updateOne(filter, update);
   }
 
   static async deleteOne(filter){
+    if (filter._id){
+      filter._id = new ObjectId(filter._id);
+    }
     return await this.col().deleteOne(filter);
   }
 

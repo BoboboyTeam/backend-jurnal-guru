@@ -1,5 +1,5 @@
 import User from '../models/user.js';
-import { generateToken } from '../helper/jwt.js';
+import { generateToken, verifyToken } from '../helper/jwt.js';
 import { comparePassword, hashPassword } from '../helper/bcrypt.js';
 
 class AuthController {
@@ -55,8 +55,10 @@ class AuthController {
             if (!user) {
                 throw { msg: 'User Not Found' };
             } else {
-                if (comparePassword(password,user.password,)) {
+                if (comparePassword(password,user.password)) {
+                    console.log(user._id);
                     const access_token = generateToken({ id: user._id });
+                    console.log(verifyToken(access_token),"<<<<<<<<<<<<<<");
                     return res.status(200).json({ access_token, role: user.role ,nama: user.nama});
                 } else {
                     throw { msg: 'Invalid Email Password' };

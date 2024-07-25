@@ -56,14 +56,18 @@ router.post('/admin/jurnal-guru', authentication, Authorization.admin, JurnalGur
 router.put('/admin/jurnal-guru/:id', authentication, Authorization.admin, JurnalGuruController.updateOne);
 router.delete('/admin/jurnal-guru/:id', authentication, Authorization.admin, JPController.deleteOne);
 
+router.get('/admin/filter/jurnal-guru',authentication, Authorization.admin, JurnalGuruController.findAllByRangeDate);
+
 
 // guru
 
 // JP
 router.get('/guru/jp', filterByDay,authentication, Authorization.guru, JPController.findAll);
+router.get('/guru/jp/:id', filterByDay,authentication, Authorization.guru, JPController.findOne);
 
 // Jurnal Guru
 router.get('/guru/jurnal-guru/now',filterByRange,authentication, Authorization.guru, JurnalGuruController.findNow);
+router.get('/guru/filter/jurnal-guru/',authentication, Authorization.guru, JurnalGuruController.findAllByRangeDate);
 router.get('/guru/jurnal-guru',authentication, Authorization.guru, JurnalGuruController.findAll);
 router.get('/guru/jurnal-guru/:id',authentication, Authorization.guru, JurnalGuruController.findOne);
 router.post('/guru/jurnal-guru',authentication, Authorization.guru, JurnalGuruController.create);
