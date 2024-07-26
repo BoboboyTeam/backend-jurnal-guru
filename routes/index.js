@@ -26,6 +26,9 @@ router.post('/login', AuthController.login);
 router.post('/register',authentication,Authorization.admin, AuthController.register);
 
 // Admin
+// Profile
+router.get('/admin/profile', authentication, Authorization.admin, UserController.findSelf);
+
 // Get Guru
 router.get('/users/:role', authentication, Authorization.admin, UserController.findAllByRole);
 // Users
@@ -54,12 +57,15 @@ router.get('/admin/jurnal-guru', authentication, Authorization.admin, JurnalGuru
 router.get('/admin/jurnal-guru/:id', authentication, Authorization.admin, JurnalGuruController.findOne);
 router.post('/admin/jurnal-guru', authentication, Authorization.admin, JurnalGuruController.create);
 router.put('/admin/jurnal-guru/:id', authentication, Authorization.admin, JurnalGuruController.updateOne);
-router.delete('/admin/jurnal-guru/:id', authentication, Authorization.admin, JPController.deleteOne);
+router.delete('/admin/jurnal-guru/:id', authentication, Authorization.admin, JurnalGuruController.deleteOne);
 
-router.get('/admin/filter/jurnal-guru',authentication, Authorization.admin, JurnalGuruController.findAllByRangeDate);
+router.get('/admin/filter/jurnal-guru/date/:id',authentication, Authorization.admin, JurnalGuruController.findAllByRangeDate);
+router.get('/admin/filter/jurnal-guru/date',authentication, Authorization.admin, JurnalGuruController.findAllByRangeDate);
 
 
 // guru
+// Profile
+router.get('/guru/profile', authentication, Authorization.guru, UserController.findSelf);
 
 // JP
 router.get('/guru/jp', filterByDay,authentication, Authorization.guru, JPController.findAll);
@@ -67,7 +73,7 @@ router.get('/guru/jp/:id', filterByDay,authentication, Authorization.guru, JPCon
 
 // Jurnal Guru
 router.get('/guru/jurnal-guru/now',filterByRange,authentication, Authorization.guru, JurnalGuruController.findNow);
-router.get('/guru/filter/jurnal-guru/',authentication, Authorization.guru, JurnalGuruController.findAllByRangeDate);
+router.get('/guru/filter/jurnal-guru/date',authentication, Authorization.guru, JurnalGuruController.findAllByRangeDate);
 router.get('/guru/jurnal-guru',authentication, Authorization.guru, JurnalGuruController.findAll);
 router.get('/guru/jurnal-guru/:id',authentication, Authorization.guru, JurnalGuruController.findOne);
 router.post('/guru/jurnal-guru',authentication, Authorization.guru, JurnalGuruController.create);

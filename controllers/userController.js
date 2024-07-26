@@ -17,7 +17,16 @@ class UserController {
             next(err);
         }
     }
-
+    static async findSelf(req, res, next) {
+        try {
+            const user = await User.findOne({ _id: req.user.id });
+            return user ? res.status(200).json(user): res.status(404).json({ message: 'Data not found' });
+        }
+        catch (err) {
+            next(err);
+        }
+    }
+    
     static async findOne(req, res, next) {
         try {
             const user = await User.findOne({ _id: req.params.id });

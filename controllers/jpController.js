@@ -65,7 +65,7 @@ class JPController {
         try {
         const filter = { _id: req.params.id };
         const jp = await JP.deleteOne(filter);
-        
+        console.log(jp)
         return jp ? res.status(200).json(jp) : res.status(404).json({ message: 'Data not found' });
         } catch (err) {
         next(err);

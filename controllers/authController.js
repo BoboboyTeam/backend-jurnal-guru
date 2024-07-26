@@ -48,8 +48,13 @@ class AuthController {
                     throw { msg: 'Email Is Empty' };
                 case !password:
                     throw { msg: 'Password Is Empty' };
-            }
+                }
             const user = await User.findOne({ email:  email  });
+            
+            if (!user) {
+                throw { msg: 'User Not Found' };
+            }
+
             console.log(comparePassword( password,user.password));
 
             if (!user) {
@@ -61,7 +66,7 @@ class AuthController {
                     console.log(verifyToken(access_token),"<<<<<<<<<<<<<<");
                     return res.status(200).json({ access_token, role: user.role ,nama: user.nama});
                 } else {
-                    throw { msg: 'Invalid Email Password' };
+                    throw { msg: 'Invalid Password' };
                 }
             }
         } catch (err) {

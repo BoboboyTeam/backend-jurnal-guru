@@ -55,6 +55,10 @@ export default class JurnalGuru {
   }
 
   static async deleteOne(filter) {
+    if (filter._id) {
+      filter._id = new ObjectId(filter._id);
+    }
+    console.log(filter,"<<<<<<<<<<<<");
     return await this.col().deleteOne(filter);
   }
 }
