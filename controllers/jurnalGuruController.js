@@ -8,26 +8,21 @@ export default class JurnalGuruController {
         // Filter Feature
         if (req.query.guru) {
           console.log(req.query.guru);
-           jurnalGuru = await JurnalGuru.findAllByGuru(req.query.guru);
+          jurnalGuru = await JurnalGuru.findAllByGuru(req.query.guru);
           console.log(jurnalGuru);
-        } 
-        
-        else if (req.query.kelas) {
-           jurnalGuru = await JurnalGuru.findAllByObj({
+        } else if (req.query.kelas) {
+          jurnalGuru = await JurnalGuru.findAllByObj({
             kelas: req.query.kelas,
           });
-        } 
-        
-        else if (req.query.hari) {
-           jurnalGuru = await JurnalGuru.findAllByObj({
+        } else if (req.query.hari) {
+          jurnalGuru = await JurnalGuru.findAllByObj({
             hari: req.query.hari,
           });
-        }
-        else{
-        jurnalGuru = await JurnalGuru.findAll();
+        } else {
+          jurnalGuru = await JurnalGuru.findAll();
         }
       } else if (req.user.role === "guru") {
-          jurnalGuru = await JurnalGuru.findAllByObj({
+        jurnalGuru = await JurnalGuru.findAllByObj({
           guru: req.user.username,
         });
       }
@@ -35,7 +30,7 @@ export default class JurnalGuruController {
         jurnal.createAt = new Date(jurnal.createAt).toDateString();
         jurnal.updateAt = new Date(jurnal.updateAt).toDateString();
       });
-        // Main Feature
+      // Main Feature
       return jurnalGuru.length > 0
         ? res.status(200).json(jurnalGuru)
         : res.status(404).json({ message: "Data not found" });
@@ -45,47 +40,71 @@ export default class JurnalGuruController {
   }
 
   static async findAllByRangeDate(req, res, next) {
-  try {
-    const month = req.query.month | new Date().getMonth();
-    const year = req.query.year | new Date().getFullYear();
+    try {
+      console.log(req.query, "<<<<<<<<<<<<<<<RANGNGNGNGN<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+      const month = req.query.month | new Date().getMonth();
+      const year = req.query.year | new Date().getFullYear();
 
-    const from = req.query.from ? req.query.from : null;
-    const to = req.query.to ? req.query.to : null;
-    
+      const from = req.query.from ? req.query.from : null;
+      const to = req.query.to ? req.query.to : null;
 
-    const startDate = from ? new Date(from) :new Date(year, month, 2);
-    const endDate = to ? new Date(to) :new Date(year, month+1, 0);
+      const startDate = from ? new Date(from) : new Date(year, month, 2);
+      const endDate = to ? new Date(to) : new Date(year, month + 1, 0);
 
-    console.log(startDate);
-    console.log(endDate);
+      console.log(startDate);
+      console.log(endDate);
 
-    const guru = req.user.role === "admin" ? req.params.id : req.user.nama;
-    console.log(guru ? guru : "");
-    const jurnalGuru = await JurnalGuru.findAllByGuruDateRange(guru ? guru : "", startDate, endDate);
+      const guru = req.user.role === "admin" ? req.params.id : req.user.id;
+      console.log(guru ? guru : "","<<<<<<<<<<<<<<<<GURUURUR");
+      console.log(req.params.id, "<<");
+      const jurnalGuru = await JurnalGuru.findAllByGuruDateRange(
+        guru ? guru : "",
+        startDate,
+        endDate
+      );
+      console.log(jurnalGuru, "<<AAAAAAAAAAAAAA")
 
-    let totalJP = 0;
-    jurnalGuru.forEach((jurnal) => {
-      if(jurnal.jumlahJP){
-        totalJP += parseInt(jurnal.jumlahJP);
-      }
-    });
-    jurnalGuru.map((jurnal) => {
-      jurnal.createAt = new Date(jurnal.createAt).toDateString();
-      jurnal.updateAt = new Date(jurnal.updateAt).toDateString();
-    });
-    const gaji = totalJP * 8000;
+      let totalJP = 0;
+      let dataJP = {};
+      jurnalGuru.forEach((jurnal) => {
+        if (
+          jurnal?.jumlahJP &&
+          (jurnal?.guruPengganti === "") |
+            (jurnal?.guruPengganti?._id === jurnal?.guru?._id)
+        ) {
+            totalJP += parseInt(jurnal.jumlahJP);
+        }
+        console.log(jurnal.jumlahJP, "<<<<<<<<<<<<<<<<<<<SSSSSSSSSSSs<<<<<<<<<<<<<<<<<");
+        const month = jurnal.createAt.getMonth();
+        const jumlahJP = jurnal.jumlahJP ? parseInt(jurnal.jumlahJP) : 0;
+        if (dataJP[month]) {
+          
+          dataJP[month]['jumlahJP'] += jumlahJP;
+          dataJP[month]['gaji'] += jumlahJP * 8000;
+        } else {
+          dataJP[month] = {};
+          dataJP[month]['jumlahJP'] = jumlahJP;
+          dataJP[month]['gaji'] = jumlahJP * 8000;
+        }
+      });
+      jurnalGuru.map((jurnal) => {
+        jurnal.createAt = new Date(jurnal.createAt).toDateString();
+        jurnal.updateAt = new Date(jurnal.updateAt).toDateString();
+      });
+      const gaji = totalJP * 8000;
 
-    console.log("DEBUG",jurnalGuru);
-    return jurnalGuru.length > 0 ? res.status(200).json({
-      totalJP,
-      gaji,
-      data:jurnalGuru,
-    }) : res.status(404).json({ message: "Data not found" });
-
-  } catch (error) {
-    next(error)
-  }
-  
+      console.log("DEBUG", dataJP);
+      return jurnalGuru.length > 0
+        ? res.status(200).json({
+            totalJP,
+            gaji,
+            dataJP,
+            data: jurnalGuru,
+          })
+        : res.status(404).json({ message: "Data not found" });
+    } catch (error) {
+      next(error);
+    }
   }
 
   static async findNow(req, res, next) {
@@ -93,8 +112,27 @@ export default class JurnalGuruController {
       const startDate = req.user.startDate;
       const endDate = req.user.endDate;
       const guru = req.user.nama;
-      const jurnalGuru = await JurnalGuru.findAllByGuruDateRange(guru,startDate, endDate);
+      const jurnalGuru = await JurnalGuru.findAllByGuruDateRange(
+        guru,
+        startDate,
+        endDate
+      );
       jurnalGuru.map((jurnal) => {
+        jurnal.createAt = new Date(jurnal.createAt).toDateString();
+        jurnal.updateAt = new Date(jurnal.updateAt).toDateString();
+      });
+      return jurnalGuru.length > 0
+        ? res.status(200).json(jurnalGuru)
+        : res.status(404).json({ message: "Data not found" });
+    } catch (err) {
+      next(err);
+    }
+  }
+  static async findAllByGuruId(req, res, next) {
+    try {
+      console.log(req.params.id, "<<<<<<<<<<<<<<<<<<<<<<<<<<,");
+      const jurnalGuru = await JurnalGuru.findAllByGuruId(req.params.id);
+      jurnalGuru?.map((jurnal) => {
         jurnal.createAt = new Date(jurnal.createAt).toDateString();
         jurnal.updateAt = new Date(jurnal.updateAt).toDateString();
       });
@@ -123,7 +161,6 @@ export default class JurnalGuruController {
 
   static async findOne(req, res, next) {
     try {
-      
       const jurnalGuru = await JurnalGuru.findById(req.params.id);
       jurnalGuru.createAt = new Date(jurnalGuru.createAt).toDateString();
       jurnalGuru.updateAt = new Date(jurnalGuru.updateAt).toDateString();

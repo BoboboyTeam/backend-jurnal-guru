@@ -9,6 +9,11 @@ export default class JurnalGuru {
     return await this.col().find({}).toArray();
   }
 
+  static async findAllByGuruId(guruId) {
+    console.log(guruId);
+    return await this.col().find({ "guru._id": guruId }).toArray();
+  }
+
   static async findAllByObj(obj) {
     return await this.col().find(obj).toArray();
   }
@@ -18,18 +23,29 @@ export default class JurnalGuru {
       .toArray();
   }
   static async findAllByGuruDateRange(guru, startDate, endDate) {
+    if(guru._id){
+      guru = guru._id
+    }
+    else if(guru){
+      guru =""+guru
+    }
+
+    const query={}
+    if(guru){
+      query["guru._id"]=guru
+    }
+    else{
+      query["guru.nama"]={regex:guru, $options: "i"}
+    }
+
+    console.log(query);
     console.log(startDate);
     console.log(endDate);
     return await this.col()
-      .find({
-        "guru.nama": { $regex: "" + guru, $options: "i" },
+      .find({...query,
         $or: [
-          {
-            createAt: { $gte: startDate, $lt: endDate },
-          },
-          { 
-            updateAt: { $gte: startDate, $lt: endDate } 
-          },
+          { createAt: { $gte: startDate, $lt: endDate } },
+          { updateAt: { $gte: startDate, $lt: endDate } },
         ],
       })
       .toArray();

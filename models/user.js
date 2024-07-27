@@ -13,6 +13,9 @@ export default class User {
   }
 
   static async findOne(obj){
+    if (obj._id){
+      obj._id = new ObjectId(obj._id);
+    }
     return await this.col().findOne(obj);
   }
 

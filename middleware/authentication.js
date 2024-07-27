@@ -23,6 +23,9 @@ const authentication = async (req, res, next) => {
                 if (!user) {
                     throw { nama: 'User Not Found' };
                 } else {
+                    let a ={"a":b}
+                    req.user = {}
+                    let b = {...a}// {{ "a":b }}
                     req.user = {...req.user,
                         id: user._id,
                         nama: user.nama,

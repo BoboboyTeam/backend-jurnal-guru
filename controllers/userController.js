@@ -68,6 +68,9 @@ class UserController {
     static async deleteOne(req, res, next) {
         try {
             const filter = { _id: req.params.id };
+            // const userTest = await User.findById(req.params.id);
+            // console.log(userTest);
+            // throw { msg: 'User Not Found' };
             const user = await User.deleteOne(filter);
             return user ? res.status(200).json(user): res.status(404).json({ message: 'Data not found' });
         } catch (err) {
