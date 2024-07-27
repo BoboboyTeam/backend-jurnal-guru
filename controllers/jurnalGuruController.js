@@ -4,6 +4,7 @@ export default class JurnalGuruController {
   static async findAll(req, res, next) {
     try {
       let jurnalGuru;
+      console.log(req.user, "<<")
       if (req.user.role === "admin") {
         // Filter Feature
         if (req.query.guru) {
@@ -22,9 +23,7 @@ export default class JurnalGuruController {
           jurnalGuru = await JurnalGuru.findAll();
         }
       } else if (req.user.role === "guru") {
-        jurnalGuru = await JurnalGuru.findAllByObj({
-          guru: req.user.username,
-        });
+        jurnalGuru = await JurnalGuru.findAllByGuruId(req.user.id);
       }
       jurnalGuru.map((jurnal) => {
         jurnal.createAt = new Date(jurnal.createAt).toDateString();

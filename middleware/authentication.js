@@ -20,12 +20,11 @@ const authentication = async (req, res, next) => {
                 throw { nama: 'AuthenticationFailed' };
             } else {
                 const user = await User.findById(id);
+                console.log(user.role)
                 if (!user) {
                     throw { nama: 'User Not Found' };
                 } else {
-                    let a ={"a":b}
-                    req.user = {}
-                    let b = {...a}// {{ "a":b }}
+
                     req.user = {...req.user,
                         id: user._id,
                         nama: user.nama,

@@ -14,6 +14,7 @@ class Authorization {
     }
     static async guru(req,res,next){
         try{
+            console.log("GUUURUURU",req.user.role)
             if(req.user.role === 'guru'){
                 next()
             }

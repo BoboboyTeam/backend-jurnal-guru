@@ -10,7 +10,7 @@ export default class JurnalGuru {
   }
 
   static async findAllByGuruId(guruId) {
-    console.log(guruId);
+    console.log(guruId,"MMMMMMMMM");
     return await this.col().find({ "guru._id": guruId }).toArray();
   }
 
