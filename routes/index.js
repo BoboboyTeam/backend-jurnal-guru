@@ -30,7 +30,7 @@ router.post('/register',AuthController.register);
 router.get('/admin/profile', authentication, Authorization.admin, UserController.findSelf);
 
 // Get Guru
-router.get('/admin/users/role/:role', authentication, Authorization.admin, UserController.findAllByRole);
+router.get('/users/role/:role', authentication, Authorization.admin, UserController.findAllByRole);
 // Users
 router.get('/admin/users', authentication, Authorization.admin, UserController.findAll);
 router.get('/admin/users/:id', authentication, Authorization.admin, UserController.findOne);

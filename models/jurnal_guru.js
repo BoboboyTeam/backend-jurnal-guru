@@ -35,7 +35,7 @@ export default class JurnalGuru {
       query["guru._id"]=guru
     }
     else{
-      query["guru.nama"]={regex:guru, $options: "i"}
+      query["guru.nama"]={$regex:guru, $options: "i"}
     }
 
     console.log(query);
