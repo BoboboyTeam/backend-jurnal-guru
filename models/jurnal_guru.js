@@ -23,21 +23,19 @@ export default class JurnalGuru {
       .toArray();
   }
   static async findAllByGuruDateRange(guru, startDate, endDate) {
-    if(guru._id){
-      guru = guru._id
-    }
-    else if(guru){
-      guru =""+guru
-    }
-
     const query={}
-    if(guru){
-      query["guru._id"]=guru
+    if(guru._id){
+      query["guru._id"]=guru._id
+    }
+    else if(typeof guru === typeof new ObjectId){
+      query["guru._id"]=""+guru
     }
     else{
       query["guru.nama"]={$regex:guru, $options: "i"}
+      
     }
-
+    console.log("GURU TYPE",typeof guru);
+    console.log("GURU",guru);
     console.log(query);
     console.log(startDate);
     console.log(endDate);

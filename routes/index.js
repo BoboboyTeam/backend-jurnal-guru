@@ -64,6 +64,7 @@ router.get('/admin/filter/jurnal-guru/date',authentication, Authorization.admin,
 router.get('/admin/filter/jurnal-guru/guru/:id',authentication, Authorization.admin, JurnalGuruController.findAllByGuruId);
 
 
+
 // guru
 // Profile
 router.get('/guru/profile', authentication, Authorization.guru, UserController.findSelf);

@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import JurnalGuru from "../models/jurnal_guru.js";
 
 export default class JurnalGuruController {
@@ -53,7 +54,7 @@ export default class JurnalGuruController {
       console.log(startDate);
       console.log(endDate);
 
-      const guru = req.user.role === "admin" ? req.params.id : req.user.id;
+      const guru = req.user.role === "admin" ? new ObjectId(req.params.id) : req.user.id;
       console.log(guru ? guru : "","<<<<<<<<<<<<<<<<GURUURUR");
       console.log(req.params.id, "<<");
       const jurnalGuru = await JurnalGuru.findAllByGuruDateRange(
@@ -116,13 +117,12 @@ export default class JurnalGuruController {
         startDate,
         endDate
       );
+      console.log(jurnalGuru,"JURNOAL OW");
       jurnalGuru.map((jurnal) => {
         jurnal.createAt = new Date(jurnal.createAt).toDateString();
         jurnal.updateAt = new Date(jurnal.updateAt).toDateString();
       });
-      return jurnalGuru.length > 0
-        ? res.status(200).json(jurnalGuru)
-        : res.status(404).json({ message: "Data not found" });
+      return res.status(200).json(jurnalGuru);
     } catch (err) {
       next(err);
     }
