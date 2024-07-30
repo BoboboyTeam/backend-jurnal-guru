@@ -30,7 +30,7 @@ router.post('/register',AuthController.register);
 router.get('/admin/profile', authentication, Authorization.admin, UserController.findSelf);
 
 // Get Guru
-router.get('/users/role/:role', authentication, Authorization.admin, UserController.findAllByRole);
+router.get('/users/role/:role', authentication, UserController.findAllByRole);
 // Users
 router.get('/admin/users', authentication, Authorization.admin, UserController.findAll);
 router.get('/admin/users/:id', authentication, Authorization.admin, UserController.findOne);
@@ -44,6 +44,7 @@ router.get('/admin/jp/:id', authentication, Authorization.admin, JPController.fi
 router.post('/admin/jp', authentication, Authorization.admin, JPController.create);
 router.put('/admin/jp/:id', authentication, Authorization.admin, JPController.updateOne);
 router.delete('/admin/jp/:id', authentication, Authorization.admin, JPController.deleteOne);
+
 
 // Kelas
 router.get('/kelas', KelasController.findAll);
@@ -62,8 +63,6 @@ router.delete('/admin/jurnal-guru/:id', authentication, Authorization.admin, Jur
 router.get('/admin/filter/jurnal-guru/date/:id',authentication, Authorization.admin, JurnalGuruController.findAllByRangeDate);
 router.get('/admin/filter/jurnal-guru/date',authentication, Authorization.admin, JurnalGuruController.findAllByRangeDate);
 router.get('/admin/filter/jurnal-guru/guru/:id',authentication, Authorization.admin, JurnalGuruController.findAllByGuruId);
-
-
 
 // guru
 // Profile

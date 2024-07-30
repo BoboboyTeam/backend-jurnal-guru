@@ -11,7 +11,7 @@ export default class JurnalGuru {
 
   static async findAllByGuruId(guruId) {
     console.log(guruId,"MMMMMMMMM");
-    return await this.col().find({ "guru._id": guruId }).toArray();
+    return await this.col().find({ "guru._id": new ObjectId(guruId) }).toArray();
   }
 
   static async findAllByObj(obj) {
@@ -28,7 +28,7 @@ export default class JurnalGuru {
       query["guru._id"]=guru._id
     }
     else if(typeof guru === typeof new ObjectId){
-      query["guru._id"]=""+guru
+      query["guru._id"]=guru
     }
     else{
       query["guru.nama"]={$regex:guru, $options: "i"}
@@ -48,6 +48,7 @@ export default class JurnalGuru {
       })
       .toArray();
   }
+  
 
   static async findOne(obj) {
     return await this.col().findOne(obj);
