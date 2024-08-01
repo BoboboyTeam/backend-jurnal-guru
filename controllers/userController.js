@@ -3,7 +3,16 @@ import User from '../models/user.js';
 class UserController {
     static async findAll(req, res, next) {
         try {
-            const user = await User.findAll();
+            let query = {};
+            if(req.query){
+                if(req.query.teacher){
+                    query["teacher.nama"] = {
+                        $regex: req.query.teacher, $options: "i"
+                    }
+                }
+            }
+            console.log(query);
+            const user = query ? await User.findByObj(query) : await User.findAll();
             return user ? res.status(200).json(user): res.status(404).json({ message: 'Data not found' });
         } catch (err) {
             next(err);

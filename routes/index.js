@@ -13,6 +13,7 @@ import express from 'express';
 import JurnalGuruController from '../controllers/jurnalGuruController.js';
 import errHandler from '../middleware/errorHandling.js';
 import filterByRange from '../middleware/filterByRange.js';
+import MapelController from '../controllers/mapelController.js';
 
 const router = express.Router();
 
@@ -47,41 +48,49 @@ router.delete('/admin/jp/:id', authentication, Authorization.admin, JPController
 
 
 // Kelas
-router.get('/kelas', KelasController.findAll);
-router.get('/kelas/:id', KelasController.findOne);
+router.get('/kelas',authentication, KelasController.findAll);
+router.get('/kelas/:id',authentication, KelasController.findOne);
 router.post('/admin/kelas', authentication, Authorization.admin, KelasController.create);
 router.put('/admin/kelas/:id', authentication, Authorization.admin, KelasController.updateOne);
 router.delete('/admin/kelas/:id', authentication, Authorization.admin, KelasController.deleteOne);
 
+// Mapel
+router.get('/mapel', authentication, MapelController.findAll);
+router.get('/mapel/:id', authentication, MapelController.findOne);
+router.post('/admin/mapel', authentication, Authorization.admin, MapelController.create);
+router.put('/admin/mapel/:id', authentication, Authorization.admin, MapelController.updateOne);
+router.delete('/admin/mapel/:id', authentication, Authorization.admin, MapelController.deleteOne);
+
+
 // Jurnal Guru
-router.get('/admin/jurnal-guru', authentication, Authorization.admin, JurnalGuruController.findAll);
-router.get('/admin/jurnal-guru/:id', authentication, Authorization.admin, JurnalGuruController.findOne);
-router.post('/admin/jurnal-guru', authentication, Authorization.admin, JurnalGuruController.create);
-router.put('/admin/jurnal-guru/:id', authentication, Authorization.admin, JurnalGuruController.updateOne);
-router.delete('/admin/jurnal-guru/:id', authentication, Authorization.admin, JurnalGuruController.deleteOne);
+router.get('/admin/jurnal-teacher', authentication, Authorization.admin, JurnalGuruController.findAll);
+router.get('/admin/jurnal-teacher/:id', authentication, Authorization.admin, JurnalGuruController.findOne);
+router.post('/admin/jurnal-teacher', authentication, Authorization.admin, JurnalGuruController.create);
+router.put('/admin/jurnal-teacher/:id', authentication, Authorization.admin, JurnalGuruController.updateOne);
+router.delete('/admin/jurnal-teacher/:id', authentication, Authorization.admin, JurnalGuruController.deleteOne);
 
-router.get('/admin/filter/jurnal-guru/date/:id',authentication, Authorization.admin, JurnalGuruController.findAllByRangeDate);
-router.get('/admin/filter/jurnal-guru/date',authentication, Authorization.admin, JurnalGuruController.findAllByRangeDate);
-router.get('/admin/filter/jurnal-guru/guru/:id',authentication, Authorization.admin, JurnalGuruController.findAllByGuruId);
+router.get('/admin/filter/jurnal-teacher/date/:id',authentication, Authorization.admin, JurnalGuruController.findAllByRangeDate);
+router.get('/admin/filter/jurnal-teacher/date',authentication, Authorization.admin, JurnalGuruController.findAllByRangeDate);
+router.get('/admin/filter/jurnal-teacher/teacher/:id',authentication, Authorization.admin, JurnalGuruController.findAllByGuruId);
 
-// guru
+// teacher
 // Profile
-router.get('/guru/profile', authentication, Authorization.guru, UserController.findSelf);
-// router.get('/guru/filter/jurnal-guru/guru/:id',authentication, Authorization.guru, JurnalGuruController.findAllByGuruId);
-router.get('/guru/filter/jurnal-guru/date/:id',authentication, Authorization.guru, JurnalGuruController.findAllByRangeDate);
-router.get('/guru/filter/jurnal-guru/date',authentication, Authorization.guru, JurnalGuruController.findAllByRangeDate);
+router.get('/teacher/profile', authentication, Authorization.teacher, UserController.findSelf);
+// router.get('/teacher/filter/jurnal-teacher/teacher/:id',authentication, Authorization.teacher, JurnalGuruController.findAllByGuruId);
+router.get('/teacher/filter/jurnal-teacher/date/:id',authentication, Authorization.teacher, JurnalGuruController.findAllByRangeDate);
+router.get('/teacher/filter/jurnal-teacher/date',authentication, Authorization.teacher, JurnalGuruController.findAllByRangeDate);
 // JP
-router.get('/guru/jp', filterByDay,authentication, Authorization.guru, JPController.findAll);
-router.get('/guru/jp/:id', filterByDay,authentication, Authorization.guru, JPController.findOne);
+router.get('/teacher/jp', filterByDay,authentication, Authorization.teacher, JPController.findAll);
+router.get('/teacher/jp/:id', filterByDay,authentication, Authorization.teacher, JPController.findOne);
 
 // Jurnal Guru
-router.get('/guru/jurnal-guru/now',filterByRange,authentication, Authorization.guru, JurnalGuruController.findNow);
-router.get('/guru/filter/jurnal-guru/date',authentication, Authorization.guru, JurnalGuruController.findAllByRangeDate);
-router.get('/guru/jurnal-guru',authentication, Authorization.guru, JurnalGuruController.findAll);
-router.get('/guru/jurnal-guru/:id',authentication, Authorization.guru, JurnalGuruController.findOne);
-router.post('/guru/jurnal-guru',authentication, Authorization.guru, JurnalGuruController.create);
-router.put('/guru/jurnal-guru/:id',authentication, Authorization.guru, JurnalGuruController.updateOne);
-router.delete('/guru/jurnal-guru/:id',authentication, Authorization.guru, JurnalGuruController.deleteOne);
+router.get('/teacher/jurnal-teacher/now',filterByRange,authentication, Authorization.teacher, JurnalGuruController.findNow);
+router.get('/teacher/filter/jurnal-teacher/date',authentication, Authorization.teacher, JurnalGuruController.findAllByRangeDate);
+router.get('/teacher/jurnal-teacher',authentication, Authorization.teacher, JurnalGuruController.findAll);
+router.get('/teacher/jurnal-teacher/:id',authentication, Authorization.teacher, JurnalGuruController.findOne);
+router.post('/teacher/jurnal-teacher',authentication, Authorization.teacher, JurnalGuruController.create);
+router.put('/teacher/jurnal-teacher/:id',authentication, Authorization.teacher, JurnalGuruController.updateOne);
+router.delete('/teacher/jurnal-teacher/:id',authentication, Authorization.teacher, JurnalGuruController.deleteOne);
 
 // Error Handler
 

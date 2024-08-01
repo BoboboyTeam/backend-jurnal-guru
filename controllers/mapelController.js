@@ -1,4 +1,4 @@
-import Mapel from "../models/mapel";
+import Mapel from "../models/mapel.js";
 
 export default class MapelController {
     static async findAll(req, res, next) {

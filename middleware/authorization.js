@@ -1,7 +1,7 @@
 class Authorization {
     static async admin(req,res,next){
         try{
-            if(req.user.role === 'admin'){
+            if(req.user.role.toLowerCase() === 'admin'){
                 next()
             }
             else{
@@ -12,14 +12,14 @@ class Authorization {
             next(err)
         }
     }
-    static async guru(req,res,next){
+    static async teacher(req,res,next){
         try{
             console.log("GUUURUURU",req.user.role)
-            if(req.user.role === 'guru'){
+            if(req.user.role.toLowerCase() === 'teacher'){
                 next()
             }
             else{
-                throw {nama: 'User is not guru'}
+                throw {nama: 'User is not teacher'}
             }
         }
         catch(err){

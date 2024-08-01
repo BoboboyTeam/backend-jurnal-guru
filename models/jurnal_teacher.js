@@ -2,40 +2,40 @@ import { db } from "./config/index.js";
 import { ObjectId } from "mongodb";
 export default class JurnalGuru {
   static col() {
-    return db.collection("jurnal_guru");
+    return db.collection("jurnal_teacher");
   }
 
   static async findAll() {
     return await this.col().find({}).toArray();
   }
 
-  static async findAllByGuruId(guruId) {
-    console.log(guruId,"MMMMMMMMM");
-    return await this.col().find({ "guru._id": new ObjectId(guruId) }).toArray();
+  static async findAllByGuruId(teacherId) {
+    console.log(teacherId,"MMMMMMMMM");
+    return await this.col().find({ "teacher._id": new ObjectId(teacherId) }).toArray();
   }
 
   static async findAllByObj(obj) {
     return await this.col().find(obj).toArray();
   }
-  static async findAllByGuru(guru) {
+  static async findAllByGuru(teacher) {
     return await this.col()
-      .find({ "guru.nama": { $regex: "" + guru, $options: "i" } })
+      .find({ "teacher.nama": { $regex: "" + teacher, $options: "i" } })
       .toArray();
   }
-  static async findAllByGuruDateRange(guru, startDate, endDate) {
+  static async findAllByGuruDateRange(teacher, startDate, endDate) {
     const query={}
-    if(guru._id){
-      query["guru._id"]=guru._id
+    if(teacher._id){
+      query["teacher._id"]=teacher._id
     }
-    else if(typeof guru === typeof new ObjectId){
-      query["guru._id"]=guru
+    else if(typeof teacher === typeof new ObjectId){
+      query["teacher._id"]=teacher
     }
     else{
-      query["guru.nama"]={$regex:guru, $options: "i"}
+      query["teacher.nama"]={$regex:teacher, $options: "i"}
       
     }
-    console.log("GURU TYPE",typeof guru);
-    console.log("GURU",guru);
+    console.log("GURU TYPE",typeof teacher);
+    console.log("GURU",teacher);
     console.log(query);
     console.log(startDate);
     console.log(endDate);
