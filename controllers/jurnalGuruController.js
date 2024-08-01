@@ -1,16 +1,16 @@
 import { ObjectId } from "mongodb";
-import JurnalGuru from "../models/jurnal_guru.js";
+import JurnalGuru from "../models/jurnal_teacher.js";
 
 export default class JurnalGuruController {
   static async findAll(req, res, next) {
     try {
       let jurnalGuru;
       console.log(req.user, "<<");
-      if (req.user.role === "admin") {
+      if (req.user.role.toLowerCase() === "admin") {
         // Filter Feature
-        if (req.query.guru) {
-          console.log(req.query.guru);
-          jurnalGuru = await JurnalGuru.findAllByGuru(req.query.guru);
+        if (req.query.teacher) {
+          console.log(req.query.teacher);
+          jurnalGuru = await JurnalGuru.findAllByGuru(req.query.teacher);
           console.log(jurnalGuru);
         } else if (req.query.kelas) {
           jurnalGuru = await JurnalGuru.findAllByObj({
@@ -23,7 +23,7 @@ export default class JurnalGuruController {
         } else {
           jurnalGuru = await JurnalGuru.findAll();
         }
-      } else if (req.user.role === "guru") {
+      } else if (req.user.role.toLowerCase() === "teacher") {
         jurnalGuru = await JurnalGuru.findAllByGuruId(req.user.id);
       }
       jurnalGuru.map((jurnal) => {
@@ -56,16 +56,16 @@ export default class JurnalGuruController {
       console.log(month, year, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 
       const startDate = from ? new Date(from) : new Date(`${year}-${month}`);
-      const endDate = to ? new Date(to) : new Date(`${year}`,`${month}`,0);
+      const endDate = to ? new Date(to) : new Date(`${year}`,`${month}`,1);
 
       console.log(startDate);
       console.log(endDate);
 
-      const guru = req.user.role === "admin" ? new ObjectId(req.params.id) : req.user.id;
-      console.log(guru ? guru : "", "<<<<<<<<<<<<<<<<GURUURUR");
+      const teacher = req.user.role.toLowerCase() === "admin" ? new ObjectId(req.params.id) : req.user.id;
+      console.log(teacher ? teacher : "", "<<<<<<<<<<<<<<<<GURUURUR");
       console.log(req.params.id, "<<");
       const jurnalGuru = await JurnalGuru.findAllByGuruDateRange(
-        guru ? guru : "",
+        teacher ? teacher : "",
         startDate,
         endDate
       );
@@ -76,8 +76,8 @@ export default class JurnalGuruController {
       jurnalGuru.forEach((jurnal) => {
         if (
           jurnal?.jumlahJP &&
-          (jurnal?.guruPengganti === "") |
-            (jurnal?.guruPengganti?._id === jurnal?.guru?._id)
+          (jurnal?.teacherReplacement === "") |
+            (jurnal?.teacherReplacement?._id === jurnal?.teacher?._id)
         ) {
           totalJP += parseInt(jurnal.jumlahJP);
         }
@@ -120,9 +120,9 @@ export default class JurnalGuruController {
     try {
       const startDate = req.user.startDate;
       const endDate = req.user.endDate;
-      const guru = req.user.nama;
+      const teacher = req.user.nama;
       const jurnalGuru = await JurnalGuru.findAllByGuruDateRange(
-        guru,
+        teacher,
         startDate,
         endDate
       );
@@ -154,7 +154,7 @@ export default class JurnalGuruController {
 
   static async findAllByGuru(req, res, next) {
     try {
-      const jurnalGuru = await JurnalGuru.findAllByGuru(req.params.guru);
+      const jurnalGuru = await JurnalGuru.findAllByGuru(req.params.teacher);
       jurnalGuru.map((jurnal) => {
         jurnal.createAt = new Date(jurnal.createAt).toDateString();
         jurnal.updateAt = new Date(jurnal.updateAt).toDateString();
@@ -187,14 +187,14 @@ export default class JurnalGuruController {
         mapel,
         kelas,
         jamKe,
-        guru,
-        guruPengganti,
+        teacher,
+        teacherReplacement,
         materi,
         jumlahJP,
       } = req.body;
-      guru._id = new ObjectId(guru._id);
-      if (guruPengganti?._id) {
-        guruPengganti._id = new ObjectId(guruPengganti._id);
+      teacher._id = new ObjectId(teacher._id);
+      if (teacherReplacement?._id) {
+        teacherReplacement._id = new ObjectId(teacherReplacement._id);
       }
       console.log(req.body);
       const jurnalGuru = await JurnalGuru.create({
@@ -204,8 +204,8 @@ export default class JurnalGuruController {
         jamKe,
         createAt: new Date(),
         updateAt: new Date(),
-        guru,
-        guruPengganti,
+        teacher,
+        teacherReplacement,
         materi,
         jumlahJP,
       });
@@ -219,9 +219,9 @@ export default class JurnalGuruController {
   static async updateOne(req, res, next) {
     try {
       const filter = { _id: req.params.id };
-      req.body.guru._id = new ObjectId(req.body.guru._id);
-      if(req.body.guruPengganti?._id){
-        req.body.guruPengganti._id = new ObjectId(req.body.guruPengganti._id);
+      req.body.teacher._id = new ObjectId(req.body.teacher._id);
+      if(req.body.teacherReplacement?._id){
+        req.body.teacherReplacement._id = new ObjectId(req.body.teacherReplacement._id);
       }
       const update = { $set: { ...req.body, updateAt: new Date() } };
       console.log(update);

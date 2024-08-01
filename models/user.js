@@ -8,8 +8,16 @@ export default class User {
   static async findAll(){
     return await this.col().find({}).toArray();
   }
+
+  static async findByObj(obj){
+    return await this.col().find(obj).toArray();
+  }
+
   static async findAllByRole(role){
-    return await this.col().find({ role }).toArray();
+
+    return await this.col().find({ role:{
+      $regex: role, $options: "i"
+    } }).toArray();
   }
 
   static async findOne(obj){

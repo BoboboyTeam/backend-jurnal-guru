@@ -14,12 +14,12 @@ export default class JP {
     return await this.col().find(obj).toArray();
   }
 
-  static async findAllByGuru(guru){
-    return await this.col().find({ "guru.nama": { $regex: ""+guru, $options: "i" } }).toArray();
+  static async findAllByGuru(teacher){
+    return await this.col().find({ "teacher.nama": { $regex: ""+teacher, $options: "i" } }).toArray();
   }
 
-  static async findAllByGuruAndHari(guru, hari){
-    return await this.col().find({ "guru.nama": { $regex: ""+guru, $options: "i" }, "hari": { $regex: ""+hari, $options: "i" } }).toArray();
+  static async findAllByGuruAndHari(teacher, hari){
+    return await this.col().find({ "teacher.nama": { $regex: ""+teacher, $options: "i" }, "hari": { $regex: ""+hari, $options: "i" } }).toArray();
   }
 
   static async findOne(obj){
