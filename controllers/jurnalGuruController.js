@@ -93,11 +93,21 @@ export default class JurnalGuruController {
       let totalJP = 0;
       let dataJP = {};
       jurnalGuru.forEach((jurnal) => {
-        if (
-          jurnal?.jumlahJP &&
-          jurnal?.teacherReplacement !== "" &&
-          jurnal?.teacherReplacement?._id === req.user.id
-        ) {
+        console.log(
+          "" + jurnal?.teacher?._id === "" + req.user.id,
+          "<<<<<<<<<<<<<<<"
+        );
+        console.log(
+          "" + jurnal?.teacherReplacement?._id === "" + req.user.id,
+          "<<<<<<<AAAAAAAAAAAA<<<<<<<<"
+        );
+        let condition;
+        condition = `${jurnal?.teacherReplacement?._id}` === `${req.user.id}`;
+        condition = condition || `${jurnal?.teacher?._id}` === `${req.user.id}`;
+        condition = condition && !!jurnal.jumlahJP;
+        console.log(condition, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+        if (condition) {
+          console.log(jurnal.jumlahJP, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
           totalJP += parseInt(jurnal.jumlahJP);
           const monthKey = jurnal.createAt.getMonth();
           const jumlahJP = jurnal.jumlahJP ? parseInt(jurnal.jumlahJP) : 0;
@@ -110,7 +120,6 @@ export default class JurnalGuruController {
             dataJP[monthKey]["gaji"] = jumlahJP * 8000;
           }
         }
-    
       });
       jurnalGuru.map((jurnal) => {
         jurnal.createAt = new Date(jurnal.createAt).toDateString();

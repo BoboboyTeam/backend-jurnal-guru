@@ -39,7 +39,7 @@ export default class JP {
   
   static async create(obj){
     Object.keys(obj).forEach((key) => {
-      if(Object.keys(obj[key]).length > 0){
+      if(obj[key] && typeof obj[key]!=='string' && Object.keys(obj[key]).length > 0){
         obj[key]._id = new ObjectId(obj[key]._id);
       }
     }
@@ -52,7 +52,7 @@ export default class JP {
       filter._id = new ObjectId(filter._id);
     }
     Object.keys(update).forEach((key) => {
-      if(Object.keys(update[key]).length > 0){
+      if(update[key] && typeof update[key]!=='string' && Object.keys(update[key]).length > 0){
         update[key]._id = new ObjectId(update[key]._id);
       }
     }
