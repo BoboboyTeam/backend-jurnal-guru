@@ -61,7 +61,6 @@ router.post('/admin/mapel', authentication, Authorization.admin, MapelController
 router.put('/admin/mapel/:id', authentication, Authorization.admin, MapelController.updateOne);
 router.delete('/admin/mapel/:id', authentication, Authorization.admin, MapelController.deleteOne);
 
-
 // Jurnal Guru
 router.get('/admin/jurnal-teacher', authentication, Authorization.admin, JurnalGuruController.findAll);
 router.get('/admin/jurnal-teacher/:id', authentication, Authorization.admin, JurnalGuruController.findOne);

@@ -1,5 +1,7 @@
 import {db} from "./config/index.js";
 import {ObjectId} from "mongodb";
+import JP from "./jadwal_pelajaran.js";
+import JurnalGuru from "./jurnal_teacher.js";
 
 export default class Mapel {
     static col() {
@@ -26,6 +28,14 @@ export default class Mapel {
         if (filter._id) {
         filter._id = new ObjectId(filter._id);
         }
+        const jp = await JP.findAllByObj({"mapel._id": filter._id});
+        if (jp.length > 0) {
+        await JP.updateOne({"mapel._id": filter._id}, { $set: { "mapel.nama": update.nama } });
+        }
+        const jurnal = await JurnalGuru.findAllByObj({"mapel._id": filter._id});
+        if (jurnal.length > 0) {
+        await JurnalGuru.updateOne({"mapel._id": filter._id}, { $set: { "mapel.nama": update.nama } });
+        }
         return await this.col().updateOne(filter, update);
     }
     
@@ -33,6 +43,18 @@ export default class Mapel {
         if (filter._id) {
         filter._id = new ObjectId(filter._id);
         }
-        return await this.col().deleteOne(filter);
+        const jp = await JP.findAllByObj({"mapel._id": filter._id});
+        
+        if (jp.length > 0) {
+        await JP.updateOne({"mapel._id":filter._id}, { $set: { "mapel": null } });
+        }
+        
+        const jurnal = await JurnalGuru.findAllByObj({"mapel._id": filter._id});
+        
+        if (jurnal.length > 0) {
+        await JurnalGuru.updateOne({"mapel._id": filter._id}, { $set: { "mapel": null } });
+        }
+
+        return await this.col().deleteOne({filter});
     }
     }

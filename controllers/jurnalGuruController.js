@@ -45,23 +45,42 @@ export default class JurnalGuruController {
         req.query,
         "<<<<<<<<<<<<<<<RANGNGNGNGN<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
       );
-      const month = req.query?.month ? req.query?.month : new Date().getMonth()>9 ? new Date().getMonth()+1 : `0${new Date().getMonth()+1}`;
+      const month = req.query?.month
+        ? req.query?.month
+        : new Date().getMonth() > 9
+        ? new Date().getMonth() + 1
+        : `0${new Date().getMonth() + 1}`;
       const year = req.query?.year ? req.query?.year : new Date().getFullYear();
 
       const from = req.query.from ? req.query.from : null;
       const to = req.query.to ? req.query.to : null;
 
-      console.log( req.query.year ? req.query.month : new Date().getFullYear(), to, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-      console.log( req.query.month, req.query.year, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-      console.log(month, year, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+      console.log(
+        req.query.year ? req.query.month : new Date().getFullYear(),
+        to,
+        "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+      );
+      console.log(
+        req.query.month,
+        req.query.year,
+        "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+      );
+      console.log(
+        month,
+        year,
+        "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+      );
 
       const startDate = from ? new Date(from) : new Date(`${year}-${month}`);
-      const endDate = to ? new Date(to) : new Date(`${year}`,`${month}`,1);
+      const endDate = to ? new Date(to) : new Date(`${year}`, `${month}`, 1);
 
       console.log(startDate);
       console.log(endDate);
 
-      const teacher = req.user.role.toLowerCase() === "admin" ? new ObjectId(req.params.id) : req.user.id;
+      const teacher =
+        req.user.role.toLowerCase() === "admin"
+          ? new ObjectId(req.params.id)
+          : req.user.id;
       console.log(teacher ? teacher : "", "<<<<<<<<<<<<<<<<GURUURUR");
       console.log(req.params.id, "<<");
       const jurnalGuru = await JurnalGuru.findAllByGuruDateRange(
@@ -76,25 +95,22 @@ export default class JurnalGuruController {
       jurnalGuru.forEach((jurnal) => {
         if (
           jurnal?.jumlahJP &&
-          (jurnal?.teacherReplacement === "") |
-            (jurnal?.teacherReplacement?._id === jurnal?.teacher?._id)
+          jurnal?.teacherReplacement !== "" &&
+          Object.keys({...jurnal?.teacherReplacement})?.length <= 0
         ) {
           totalJP += parseInt(jurnal.jumlahJP);
+          const monthKey = jurnal.createAt.getMonth();
+          const jumlahJP = jurnal.jumlahJP ? parseInt(jurnal.jumlahJP) : 0;
+          if (dataJP[monthKey]) {
+            dataJP[monthKey]["jumlahJP"] += jumlahJP;
+            dataJP[monthKey]["gaji"] += jumlahJP * 8000;
+          } else {
+            dataJP[monthKey] = {};
+            dataJP[monthKey]["jumlahJP"] = jumlahJP;
+            dataJP[monthKey]["gaji"] = jumlahJP * 8000;
+          }
         }
-        console.log(
-          jurnal.jumlahJP,
-          "<<<<<<<<<<<<<<<<<<<SSSSSSSSSSSs<<<<<<<<<<<<<<<<<"
-        );
-        const monthKey = jurnal.createAt.getMonth();
-        const jumlahJP = jurnal.jumlahJP ? parseInt(jurnal.jumlahJP) : 0;
-        if (dataJP[monthKey]) {
-          dataJP[monthKey]["jumlahJP"] += jumlahJP;
-          dataJP[monthKey]["gaji"] += jumlahJP * 8000;
-        } else {
-          dataJP[monthKey] = {};
-          dataJP[monthKey]["jumlahJP"] = jumlahJP;
-          dataJP[monthKey]["gaji"] = jumlahJP * 8000;
-        }
+    
       });
       jurnalGuru.map((jurnal) => {
         jurnal.createAt = new Date(jurnal.createAt).toDateString();
@@ -220,8 +236,10 @@ export default class JurnalGuruController {
     try {
       const filter = { _id: req.params.id };
       req.body.teacher._id = new ObjectId(req.body.teacher._id);
-      if(req.body.teacherReplacement?._id){
-        req.body.teacherReplacement._id = new ObjectId(req.body.teacherReplacement._id);
+      if (req.body.teacherReplacement?._id) {
+        req.body.teacherReplacement._id = new ObjectId(
+          req.body.teacherReplacement._id
+        );
       }
       const update = { $set: { ...req.body, updateAt: new Date() } };
       console.log(update);

@@ -1,5 +1,7 @@
 import { db } from "./config/index.js";
 import { ObjectId } from "mongodb";
+import JP from "./jadwal_pelajaran.js";
+import JurnalGuru from "./jurnal_teacher.js";
 export default class Kelas {
   static col() {
     return db.collection("kelas");
@@ -22,9 +24,20 @@ export default class Kelas {
   }
 
   static async updateOne(filter, update){
-    if (filter._id){
+    if (typeof filter._id === "string") {
       filter._id = new ObjectId(filter._id);
     }
+
+    const jp = await JP.findAllByObj({"kelas._id": filter._id});
+    if (jp.length > 0) {
+      await JP.updateOne({"kelas._id": filter._id}, { $set: { "kelas.nama": update.nama } });
+    }
+    const jurnal = await JurnalGuru.findAllByObj({"kelas._id": filter._id});
+    if (jurnal.length > 0) {
+      await JurnalGuru.updateOne({"kelas._id": filter._id}, { $set: { "kelas.nama": update.nama } });
+    }
+
+
     return await this.col().updateOne(filter, update);
   }
 
@@ -32,6 +45,16 @@ export default class Kelas {
     if (filter._id){
       filter._id = new ObjectId(filter._id);
     }
+
+    const jp = await JP.findAllByObj({"kelas._id": filter._id});
+    if (jp.length > 0) {
+      await JP.updateOne({"kelas._id":filter._id}, { $set: { "kelas": null } });
+    }
+    const jurnal = await JurnalGuru.findAllByObj({"kelas._id": filter._id});
+    if (jurnal.length > 0) {
+      await JurnalGuru.updateOne({"kelas._id": filter._id}, { $set: { "kelas": null } });
+    }
+
     return await this.col().deleteOne(filter);
   }
   
