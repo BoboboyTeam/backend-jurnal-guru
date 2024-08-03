@@ -38,6 +38,12 @@ export default class JP {
   }
   
   static async create(obj){
+    Object.keys(obj).forEach((key) => {
+      if(Object.keys(obj[key]).length > 0){
+        obj[key]._id = new ObjectId(obj[key]._id);
+      }
+    }
+    );
     return await this.col().insertOne(obj);
   }
 
@@ -45,6 +51,13 @@ export default class JP {
     if (filter._id){
       filter._id = new ObjectId(filter._id);
     }
+    Object.keys(update).forEach((key) => {
+      if(Object.keys(update[key]).length > 0){
+        update[key]._id = new ObjectId(update[key]._id);
+      }
+    }
+    );
+
     return await this.col().updateOne(filter, update);
   }
 

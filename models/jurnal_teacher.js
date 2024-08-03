@@ -10,8 +10,10 @@ export default class JurnalGuru {
   }
 
   static async findAllByGuruId(teacherId) {
-    console.log(teacherId,"MMMMMMMMM");
-    return await this.col().find({ "teacher._id": new ObjectId(teacherId) }).toArray();
+    console.log(teacherId, "MMMMMMMMM");
+    return await this.col()
+      .find({ "teacher._id": new ObjectId(teacherId) })
+      .toArray();
   }
 
   static async findAllByObj(obj) {
@@ -23,24 +25,22 @@ export default class JurnalGuru {
       .toArray();
   }
   static async findAllByGuruDateRange(teacher, startDate, endDate) {
-    const query={}
-    if(teacher._id){
-      query["teacher._id"]=teacher._id
+    const query = {};
+    if (teacher._id) {
+      query["teacher._id"] = teacher._id;
+    } else if (typeof teacher === typeof new ObjectId()) {
+      query["teacher._id"] = teacher;
+    } else {
+      query["teacher.nama"] = { $regex: teacher, $options: "i" };
     }
-    else if(typeof teacher === typeof new ObjectId){
-      query["teacher._id"]=teacher
-    }
-    else{
-      query["teacher.nama"]={$regex:teacher, $options: "i"}
-      
-    }
-    console.log("GURU TYPE",typeof teacher);
-    console.log("GURU",teacher);
+    console.log("GURU TYPE", typeof teacher);
+    console.log("GURU", teacher);
     console.log(query);
     console.log(startDate);
     console.log(endDate);
     return await this.col()
-      .find({...query,
+      .find({
+        ...query,
         $or: [
           { createAt: { $gte: startDate, $lt: endDate } },
           { updateAt: { $gte: startDate, $lt: endDate } },
@@ -48,7 +48,6 @@ export default class JurnalGuru {
       })
       .toArray();
   }
-  
 
   static async findOne(obj) {
     return await this.col().findOne(obj);
@@ -59,6 +58,11 @@ export default class JurnalGuru {
   }
 
   static async create(obj) {
+    Object.keys(obj).forEach((key) => {
+      if (Object.keys(obj[key]).length > 0) {
+        obj[key]._id = new ObjectId(obj[key]._id);
+      }
+    });
     return await this.col().insertOne(obj);
   }
 
@@ -66,6 +70,11 @@ export default class JurnalGuru {
     if (filter._id) {
       filter._id = new ObjectId(filter._id);
     }
+    Object.keys(update).forEach((key) => {
+      if (Object.keys(update[key]).length > 0) {
+        update[key]._id = new ObjectId(update[key]._id);
+      }
+    });
     return await this.col().updateOne(filter, update);
   }
 
@@ -73,7 +82,7 @@ export default class JurnalGuru {
     if (filter._id) {
       filter._id = new ObjectId(filter._id);
     }
-    console.log(filter,"<<<<<<<<<<<<");
+    console.log(filter, "<<<<<<<<<<<<");
     return await this.col().deleteOne(filter);
   }
 }

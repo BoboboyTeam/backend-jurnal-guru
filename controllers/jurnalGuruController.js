@@ -96,7 +96,7 @@ export default class JurnalGuruController {
         if (
           jurnal?.jumlahJP &&
           jurnal?.teacherReplacement !== "" &&
-          Object.keys({...jurnal?.teacherReplacement})?.length <= 0
+          jurnal?.teacherReplacement?._id === req.user.id
         ) {
           totalJP += parseInt(jurnal.jumlahJP);
           const monthKey = jurnal.createAt.getMonth();
