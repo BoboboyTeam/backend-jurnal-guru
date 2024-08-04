@@ -30,6 +30,8 @@ class JPController {
           : res.status(404).json({ message: "Data not found" });
       } else if (req.user.role.toLowerCase() === "teacher") {
         const jp = await JP.findAllByGuruAndHari(req.user.nama, req.user.hari);
+        console.log(jp, "jp");
+        console.log(req.user.nama, req.user.hari);
         return jp
           ? res.status(200).json(jp)
           : res.status(404).json({ message: "Data not found" });

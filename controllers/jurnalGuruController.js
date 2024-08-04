@@ -77,10 +77,17 @@ export default class JurnalGuruController {
       console.log(startDate);
       console.log(endDate);
 
-      const teacher =
+      let teacher =
         req.user.role.toLowerCase() === "admin"
           ? new ObjectId(req.params.id)
           : req.user.id;
+      if(!req.params.id){
+        teacher = null;
+      }
+      if(req.user.role.toLowerCase() === "teacher"){
+        teacher = req.user.id;
+      }
+      
       console.log(teacher ? teacher : "", "<<<<<<<<<<<<<<<<GURUURUR");
       console.log(req.params.id, "<<");
       const jurnalGuru = await JurnalGuru.findAllByGuruDateRange(
@@ -152,11 +159,11 @@ export default class JurnalGuruController {
         startDate,
         endDate
       );
-      console.log(jurnalGuru, "JURNOAL OW");
       jurnalGuru.map((jurnal) => {
         jurnal.createAt = new Date(jurnal.createAt).toDateString();
         jurnal.updateAt = new Date(jurnal.updateAt).toDateString();
       });
+      console.log(jurnalGuru, "JURNOAL OW");
       return res.status(200).json(jurnalGuru);
     } catch (err) {
       next(err);

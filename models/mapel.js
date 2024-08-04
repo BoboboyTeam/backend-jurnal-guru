@@ -30,7 +30,7 @@ export default class Mapel {
     }
     console.log(update, "update");
     const jp = await JP.findAllByObj({ "mapel._id": filter._id });
-    console.log(jp[0].mapel, "jp");
+    console.log(jp[0]?.mapel, "jp");
     if (jp.length > 0) {
       const updateRespon = await JP.updateMany(
         {
