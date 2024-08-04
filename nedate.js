@@ -1,10 +1,10 @@
+import CryptoJS from 'crypto-js';
+var encrypted = CryptoJS.AES.encrypt("Message", "Secret Passphrase");
+//U2FsdGVkX18ZUVvShFSES21qHsQEqZXMxQ9zgHy+bu0=
 
-const currentDate = new Date().toLocaleString();
-const startDate = new Date(currentDate);
-startDate.setHours(0, 0, 0, 0);
-const endDate = new Date(currentDate);
-endDate.setHours(23, 59, 59, 999);
+var decrypted = CryptoJS.AES.decrypt(encrypted.toString(), "Secret Passphrase");
+//4d657373616765
 
-console.log(startDate);
-console.log(endDate);
-console.log(startDate<endDate);
+
+console.log(encrypted.toString());
+console.log(decrypted.toString(CryptoJS.enc.Utf8));

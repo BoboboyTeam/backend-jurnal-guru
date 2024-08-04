@@ -1,3 +1,4 @@
+import { decryptPassword, hashPassword } from '../helper/bcrypt.js';
 import User from '../models/user.js';
 
 class UserController {
@@ -29,7 +30,7 @@ class UserController {
     static async findSelf(req, res, next) {
         try {
             const user = await User.findOne({ _id: req.user.id });
-            return user ? res.status(200).json(user): res.status(404).json({ message: 'Data not found' });
+            return user ? res.status(200).json({...user,password:decryptPassword(user.password)}): res.status(404).json({ message: 'Data not found' });
         }
         catch (err) {
             next(err);
@@ -39,7 +40,7 @@ class UserController {
     static async findOne(req, res, next) {
         try {
             const user = await User.findOne({ _id: req.params.id });
-            return user ? res.status(200).json(user): res.status(404).json({ message: 'Data not found' });
+            return user ? res.status(200).json({...user,password:decryptPassword(user.password)}): res.status(404).json({ message: 'Data not found' });
         } catch (err) {
             next(err);
         }
@@ -66,6 +67,9 @@ class UserController {
     static async updateOne(req, res, next) {
         try {
             const filter = { _id: req.params.id };
+            if(req?.body?.password){
+                req.body.password = hashPassword(req.body.password);
+            }
             const update = { $set: req.body };
             const user = await User.updateOne(filter, update);
             return user ? res.status(200).json(user): res.status(404).json({ message: 'Data not found' });

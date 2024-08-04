@@ -25,11 +25,11 @@ export default class JurnalGuru {
       .toArray();
   }
   static async findAllByGuruDateRange(teacher, startDate, endDate) {
-    const query = {};
+    let query = {};
     if (teacher._id) {
-      query["teacher._id"] = teacher._id;
+      query = {...query, $or: [{ "teacher._id": teacher._id }, { "teacher._id": "" + teacher._id }]};
     } else if (typeof teacher === typeof new ObjectId()) {
-      query["teacher._id"] = teacher;
+      query= {...query, $or: [{ "teacher._id": teacher }, { "teacher._id": "" + teacher }]};
     } else {
       query["teacher.nama"] = { $regex: teacher, $options: "i" };
     }
@@ -70,12 +70,18 @@ export default class JurnalGuru {
     if (filter._id) {
       filter._id = new ObjectId(filter._id);
     }
-    Object.keys(update).forEach((key) => {
-      if (update[key] && typeof update[key]!=='string' && Object.keys(update[key]).length > 0) {
-        update[key]._id = new ObjectId(update[key]._id);
+    Object.keys(update["$set"]).forEach((key) => {
+      if (update["$set"][key] && typeof update["$set"][key]!=='string' && Object.keys(update["$set"][key]).length > 0) {
+        update["$set"][key]._id = new ObjectId(update["$set"][key]._id);
       }
     });
     return await this.col().updateOne(filter, update);
+  }
+  static async updateMany(filter, update){
+    if (filter._id){
+      filter._id = new ObjectId(filter._id);
+    }
+    return await this.col().updateMany(filter, update);
   }
 
   static async deleteOne(filter) {

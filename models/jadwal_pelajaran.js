@@ -51,15 +51,23 @@ export default class JP {
     if (filter._id){
       filter._id = new ObjectId(filter._id);
     }
-    Object.keys(update).forEach((key) => {
-      if(update[key] && typeof update[key]!=='string' && Object.keys(update[key]).length > 0){
-        update[key]._id = new ObjectId(update[key]._id);
+    Object.keys(update["$set"]).forEach((key) => {
+      if(update["$set"][key] && typeof update["$set"][key]!=='string' && Object.keys(update["$set"][key]).length > 0){
+        update["$set"][key]._id = new ObjectId(update["$set"][key]._id);
       }
     }
     );
 
     return await this.col().updateOne(filter, update);
   }
+
+  static async updateMany(filter, update){
+    if (filter._id){
+      filter._id = new ObjectId(filter._id);
+    }
+    return await this.col().updateMany(filter, update);
+  }
+
 
   static async deleteOne(filter){
     if (filter._id){
