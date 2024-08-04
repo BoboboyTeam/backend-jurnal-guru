@@ -13,7 +13,7 @@ const filterByDay = (req, res, next) => {
     console.log(dateStr,"FILTER BU DAY");
     console.log(new Date().toLocaleDateString())
     let hari = new Date(dateStr);
-    hari = new Date().toLocaleDateString("id-ID", { weekday: 'long' }); 
+    hari = new Date().toLocaleDateString("id-ID", { weekday: 'long',timeZone: 'Asia/Jakarta' }); 
     console.log(hari);
     hari = dateTranslator[hari];
     req.user = {...req.user, hari};
