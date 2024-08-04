@@ -1,6 +1,6 @@
-import { db } from "./config/index.js";
-import { ObjectId } from "mongodb";
-export default class JurnalGuru {
+const db = require("./config/index.js").db;
+const ObjectId = require("mongodb").ObjectId;
+class JurnalGuru {
   static col() {
     return db.collection("jurnal_teacher");
   }
@@ -92,3 +92,4 @@ export default class JurnalGuru {
     return await this.col().deleteOne(filter);
   }
 }
+module.exports = JurnalGuru;

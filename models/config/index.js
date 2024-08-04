@@ -1,8 +1,6 @@
-import { MongoClient, ServerApiVersion } from "mongodb";
-import dotenv from "dotenv";
-if (process.env.NODE_ENV !== 'production') {
-  dotenv.config();
-}
+const { MongoClient, ServerApiVersion } = require("mongodb");
+const dotenv = require("dotenv");
+dotenv.config();
 const uri =
   process.env.MONGODB_URI || null;
 
@@ -19,8 +17,10 @@ const client = new MongoClient(uri, {
 });
 
 //To Export db and db.getCollection()
-export const db = client.db("backendSekolah");
+const db = client.db("backendSekolah");
 
-export const getCollection = (collectionName) => {
+const getCollection = (collectionName) => {
   return db.collection(collectionName);
 };
+
+module.exports = { db, getCollection };

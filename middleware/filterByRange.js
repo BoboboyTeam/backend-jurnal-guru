@@ -17,4 +17,4 @@ const filterByRange = (req, res, next) => {
         next();
     }
 
-export default filterByRange;
+module.exports= filterByRange;

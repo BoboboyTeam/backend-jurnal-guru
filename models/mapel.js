@@ -1,9 +1,9 @@
-import { db } from "./config/index.js";
-import { ObjectId } from "mongodb";
-import JP from "./jadwal_pelajaran.js";
-import JurnalGuru from "./jurnal_teacher.js";
+const db = require("./config/index.js").db;
+const ObjectId = require("mongodb").ObjectId;
+const JP = require("./jadwal_pelajaran.js");
+const JurnalGuru = require("./jurnal_teacher.js");
 
-export default class Mapel {
+class Mapel {
   static col() {
     return db.collection("mapel");
   }
@@ -95,3 +95,4 @@ export default class Mapel {
     return await this.col().deleteOne(filter);
   }
 }
+module.exports = Mapel;

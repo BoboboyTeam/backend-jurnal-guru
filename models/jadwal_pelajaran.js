@@ -1,6 +1,6 @@
-import { db } from "./config/index.js";
-import { ObjectId } from "mongodb";
-export default class JP {
+const { ObjectId } = require("mongodb");
+const db = require("./config/index.js").db;
+class JP {
   static col() {
     return db.collection("jp");
   }
@@ -78,3 +78,4 @@ export default class JP {
   
 }
 
+module.exports = JP

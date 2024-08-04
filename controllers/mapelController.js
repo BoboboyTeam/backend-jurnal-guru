@@ -1,6 +1,6 @@
-import Mapel from "../models/mapel.js";
+const Mapel = require("../models/mapel");
 
-export default class MapelController {
+class MapelController {
     static async findAll(req, res, next) {
         try {
         const mapel = await Mapel.findAll();
@@ -59,3 +59,5 @@ export default class MapelController {
         }
     }
     }
+
+module.exports = MapelController;

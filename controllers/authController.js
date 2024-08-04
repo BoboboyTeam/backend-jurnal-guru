@@ -1,6 +1,6 @@
-import User from '../models/user.js';
-import { generateToken, verifyToken } from '../helper/jwt.js';
-import { comparePassword, hashPassword } from '../helper/bcrypt.js';
+const User = require('../models/user.js');
+const { generateToken, verifyToken } = require('../helper/jwt.js');
+const { comparePassword, hashPassword } = require('../helper/bcrypt.js');
 
 class AuthController {
     static register = async (req, res, next) => {
@@ -75,4 +75,4 @@ class AuthController {
     };
 }
 
-export default AuthController;
+module.exports = AuthController;

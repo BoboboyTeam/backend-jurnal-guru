@@ -1,5 +1,5 @@
-import User  from '../models/user.js';
-import { verifyToken } from '../helper/jwt.js';
+const User = require('../models/user.js');
+const { verifyToken } = require('../helper/jwt.js');
 
 const authentication = async (req, res, next) => {
     try {
@@ -39,4 +39,4 @@ const authentication = async (req, res, next) => {
     }
 };
 
-export default authentication;
+module.exports= authentication;

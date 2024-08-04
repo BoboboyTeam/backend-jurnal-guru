@@ -9,4 +9,4 @@ const filterByDay = (req, res, next) => {
     next();
 };
 
-export { filterByDay };
+module.exports=  filterByDay;

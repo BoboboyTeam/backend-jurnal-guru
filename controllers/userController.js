@@ -1,5 +1,5 @@
-import { decryptPassword, hashPassword } from '../helper/bcrypt.js';
-import User from '../models/user.js';
+const User = require('../models/user');
+const { hashPassword, decryptPassword } = require('../helper/bcrypt');
 
 class UserController {
     static async findAll(req, res, next) {
@@ -92,4 +92,4 @@ class UserController {
     }
 }
 
-export default UserController;
+module.exports = UserController;

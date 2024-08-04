@@ -1,7 +1,6 @@
-import { ObjectId } from "mongodb";
-import JurnalGuru from "../models/jurnal_teacher.js";
-
-export default class JurnalGuruController {
+const JurnalGuru = require("../models/jurnal_teacher");
+const { ObjectId } = require("mongodb");
+class JurnalGuruController {
   static async findAll(req, res, next) {
     try {
       let jurnalGuru;
@@ -94,16 +93,16 @@ export default class JurnalGuruController {
       let dataJP = {};
       jurnalGuru.forEach((jurnal) => {
         console.log(
-          "" + jurnal?.teacher?._id === "" + req.user.id,
+          "" + jurnal?.teacher?._id ,"===", "" + teacher,
           "<<<<<<<<<<<<<<<"
         );
         console.log(
-          "" + jurnal?.teacherReplacement?._id === "" + req.user.id,
+          "" + jurnal?.teacherReplacement?._id ,"===", "" + teacher,
           "<<<<<<<AAAAAAAAAAAA<<<<<<<<"
         );
         let condition;
-        condition = `${jurnal?.teacherReplacement?._id}` === `${req.user.id}`;
-        condition = condition || `${jurnal?.teacher?._id}` === `${req.user.id}`;
+        condition = `${jurnal?.teacherReplacement?._id}` === `${teacher}`;
+        condition = condition || `${jurnal?.teacher?._id}` === `${teacher}`;
         condition = condition && !!jurnal.jumlahJP;
         console.log(condition, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
         if (condition) {
@@ -274,3 +273,4 @@ export default class JurnalGuruController {
     }
   }
 }
+module.exports = JurnalGuruController

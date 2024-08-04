@@ -1,8 +1,8 @@
-import { db } from "./config/index.js";
-import { ObjectId } from "mongodb";
-import JP from "./jadwal_pelajaran.js";
-import JurnalGuru from "./jurnal_teacher.js";
-export default class Kelas {
+const db = require("./config/index.js").db;
+const ObjectId = require("mongodb").ObjectId;
+const JP = require("./jadwal_pelajaran.js");
+const JurnalGuru = require("./jurnal_teacher.js");
+class Kelas {
   static col() {
     return db.collection("kelas");
   }
@@ -76,3 +76,4 @@ export default class Kelas {
     return await this.col().deleteOne(filter);
   }
 }
+module.exports = Kelas;

@@ -1,4 +1,4 @@
-import Kelas from "../models/kelas.js";
+const Kelas = require("../models/kelas");
 
 class KelasController {
     static async findAll(req, res, next) {
@@ -58,4 +58,4 @@ class KelasController {
     }
 }
 
-export default KelasController;
+module.exports= KelasController;

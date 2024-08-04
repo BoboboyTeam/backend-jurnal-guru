@@ -1,5 +1,5 @@
-import JP from "../models/jadwal_pelajaran.js";
-import { ObjectId } from "mongodb";
+const JP = require("../models/jadwal_pelajaran");
+const { ObjectId } = require("mongodb");
 class JPController {
   static async findAll(req, res, next) {
     try {
@@ -119,4 +119,4 @@ class JPController {
   }
 }
 
-export default JPController;
+module.exports = JPController;
