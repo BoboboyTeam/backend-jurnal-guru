@@ -3,7 +3,7 @@ import authentication from '../middleware/authentication.js';
 import Authorization from '../middleware/authorization.js';
 
 // Controller
-import AuthController from '../controllers/AuthController.js';
+import AuthController from '../controllers/authController.js';
 import UserController from '../controllers/userController.js';
 import JPController from '../controllers/jpController.js';
 import KelasController from '../controllers/kelasController.js';
