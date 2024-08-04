@@ -109,7 +109,8 @@ export default class JurnalGuruController {
         if (condition) {
           console.log(jurnal.jumlahJP, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
           totalJP += parseInt(jurnal.jumlahJP);
-          const monthKey = jurnal.createAt.getMonth();
+          const monthKey = jurnal.updateAt.getMonth();
+          console.log(monthKey, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
           const jumlahJP = jurnal.jumlahJP ? parseInt(jurnal.jumlahJP) : 0;
           if (dataJP[monthKey]) {
             dataJP[monthKey]["jumlahJP"] += jumlahJP;
