@@ -94,11 +94,11 @@ export default class JurnalGuruController {
       let dataJP = {};
       jurnalGuru.forEach((jurnal) => {
         console.log(
-          "" + jurnal?.teacher?._id === "" + teacher,
+          "" + jurnal?.teacher?._id, "===", "" + teacher,
           "<<<<<<<<<<<<<<<"
         );
         console.log(
-          "" + jurnal?.teacherReplacement?._id === "" + teacher,
+          "" + jurnal?.teacherReplacement?._id, "===", "" + teacher,
           "<<<<<<<AAAAAAAAAAAA<<<<<<<<"
         );
         let condition;

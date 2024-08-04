@@ -25,28 +25,40 @@ export default class JurnalGuru {
       .toArray();
   }
   static async findAllByGuruDateRange(teacher, startDate, endDate) {
-    let query = {};
+    let teacherQuery = {};
+    
+    // Build the teacher query part
     if (teacher._id) {
-      query = {...query, $or: [{ "teacher._id": teacher._id }, { "teacher._id": "" + teacher._id }]};
+        teacherQuery = { $or: [{ "teacher._id": teacher._id }, { "teacher._id": "" + teacher._id }] };
     } else if (typeof teacher === typeof new ObjectId()) {
-      query= {...query, $or: [{ "teacher._id": teacher }, { "teacher._id": "" + teacher }]};
+        teacherQuery = { $or: [{ "teacher._id": teacher }, { "teacher._id": "" + teacher }] };
     } else {
-      query["teacher.nama"] = { $regex: teacher, $options: "i" };
+        teacherQuery["teacher.nama"] = { $regex: teacher, $options: "i" };
     }
+    
+    // Build the date range query part
+    const dateRangeQuery = {
+        $or: [
+            { createAt: { $gte: startDate, $lt: endDate } },
+            { updateAt: { $gte: startDate, $lt: endDate } }
+        ]
+    };
+
+    // Combine both queries using $and
+    const query = {
+        $and: [teacherQuery, dateRangeQuery]
+    };
+    
     console.log("GURU TYPE", typeof teacher);
     console.log("GURU", teacher);
     console.log(query);
+    
     console.log(startDate);
     console.log(endDate);
+    
     return await this.col()
-      .find({
-        ...query,
-        $or: [
-          { createAt: { $gte: startDate, $lt: endDate } },
-          { updateAt: { $gte: startDate, $lt: endDate } },
-        ],
-      })
-      .toArray();
+        .find(query)
+        .toArray();
   }
 
   static async findOne(obj) {
