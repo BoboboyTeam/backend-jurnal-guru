@@ -20,7 +20,7 @@ const authentication = async (req, res, next) => {
                 throw { nama: 'AuthenticationFailed' };
             } else {
                 const user = await User.findById(id);
-                console.log(user.role)
+                console.log(user?.role)
                 if (!user) {
                     throw { nama: 'User Not Found' };
                 } else {

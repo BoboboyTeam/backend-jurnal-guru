@@ -19,7 +19,7 @@ const client = new MongoClient(uri, {
 });
 
 //To Export db and db.getCollection()
-export const db = client.db("backendSekolah");
+export const db = client.db("JurnalGuru");
 
 export const getCollection = (collectionName) => {
   return db.collection(collectionName);
