@@ -48,14 +48,12 @@ class UserController {
 
     static async create(req, res, next) {
         try {
-            const { nama, email, password, role } = req.body;
-            if (!nama || !email || !password || !role) {
+            const { nama, username, password, role } = req.body;
+            if (!nama || !username || !password || !role) {
                 throw { msg: 'Data Is Not Complete' };
             }
             const user = await User.create({
-                nama,
-                email,
-                password,
+                ...req.body,
                 role: role.toLowerCase(),
             });
             res.status(201).json(user);

@@ -5,33 +5,32 @@ import { comparePassword, hashPassword } from '../helper/bcrypt.js';
 class AuthController {
     static register = async (req, res, next) => {
         try {
-            const { nama, email, password, role } = req.body;
+            const { nama, username, password, role } = req.body;
             
             switch (true) {
                 case !nama:
                     throw { msg: 'Name Is Empty' };
-                case !email:
-                    throw { msg: 'Email Is Empty' };
+                case !username:
+                    throw { msg: 'Username Is Empty' };
                 case !password:
                     throw { msg: 'Password Is Empty' };
                 case !role:
                     throw { msg: 'Role Is Empty' };
             }
             
-            const checkUser = await User.findOne({ email:email });
+            const checkUser = await User.findOne({ username:username });
 
             if (checkUser) {
-                throw { msg: 'Email Already Exist' };
+                throw { msg: 'Username Already Exist' };
             }
 
             const user = await User.create({
-                nama,
-                email,
+                ...req.body,
                 password: hashPassword(password),
                 role: role.toLowerCase(),
             });
             return res.status(201).json({
-                email: email,
+                username: username,
                 role: role,
             });
         } catch (err) {
@@ -41,15 +40,15 @@ class AuthController {
 
     static login = async (req, res, next) => {
         try {
-            const { email, password } = req.body;
+            const { username, password } = req.body;
 
             switch (true) {
-                case !email:
-                    throw { msg: 'Email Is Empty' };
+                case !username:
+                    throw { msg: 'Username Is Empty' };
                 case !password:
                     throw { msg: 'Password Is Empty' };
                 }
-            const user = await User.findOne({ email:  email  });
+            const user = await User.findOne({ username:  username  });
             
             if (!user) {
                 throw { msg: 'User Not Found' };

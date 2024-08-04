@@ -35,14 +35,25 @@ export default class JurnalGuru {
     } else {
         teacherQuery["teacher.nama"] = { $regex: teacher, $options: "i" };
     }
+    await this.col().find(teacherQuery).toArray().then((result) => {
+      console.log(result,"AAAAAAAAAAAAAAAAS");
+    });
+
+    Object.keys(teacherQuery).forEach((item)=>{
+      console.log(teacherQuery[item]);
+    })
     
     // Build the date range query part
     const dateRangeQuery = {
         $or: [
-            { createAt: { $gte: startDate, $lt: endDate } },
+            // { createAt: { $gte: startDate, $lt: endDate } },
             { updateAt: { $gte: startDate, $lt: endDate } }
         ]
     };
+
+    Object.keys(dateRangeQuery).forEach((item)=>{
+      console.log(dateRangeQuery[item]);
+    })
 
     // Combine both queries using $and
     const query = {
@@ -51,7 +62,7 @@ export default class JurnalGuru {
     
     console.log("GURU TYPE", typeof teacher);
     console.log("GURU", teacher);
-    console.log(query);
+    
     
     console.log(startDate);
     console.log(endDate);
