@@ -9,7 +9,7 @@ export default class Mapel {
   }
 
   static async findAll() {
-    return await this.col().find({}).toArray();
+    return await this.col().find({}).sort({nama:1}).collation({ locale: "en", caseLevel: true }).toArray();
   }
 
   static async findOne(obj) {

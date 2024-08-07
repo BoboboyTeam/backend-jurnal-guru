@@ -6,18 +6,18 @@ export default class User {
   }
 
   static async findAll(){
-    return await this.col().find({}).toArray();
+    return await this.col().find({}).sort({nama:1}).collation({ locale: "en", caseLevel: true }).toArray();
   }
 
   static async findByObj(obj){
-    return await this.col().find(obj).toArray();
+    return await this.col().find(obj).sort({nama:1}).collation({ locale: "en", caseLevel: true }).toArray();
   }
 
   static async findAllByRole(role){
 
     return await this.col().find({ role:{
       $regex: role, $options: "i"
-    } }).toArray();
+    } }).sort({nama:1}).collation({ locale: "en", caseLevel: true }).toArray();
   }
 
   static async findOne(obj){
