@@ -12,7 +12,13 @@ export default class JurnalGuru {
   static async findAllByGuruId(teacherId) {
     console.log(teacherId, "MMMMMMMMM");
     return await this.col()
-      .find({ "teacher._id": new ObjectId(teacherId) })
+      .find({
+        $or: [
+          { "teacher._id": new ObjectId(teacherId) },
+          { "teacher._id": "" + teacherId },
+          { "teacher._id": teacherId },
+        ],
+      })
       .toArray();
   }
 
@@ -26,50 +32,57 @@ export default class JurnalGuru {
   }
   static async findAllByGuruDateRange(teacher, startDate, endDate) {
     let teacherQuery = {};
-    
+
     // Build the teacher query part
     if (teacher._id) {
-        teacherQuery = { $or: [{ "teacher._id": teacher._id }, { "teacher._id": "" + teacher._id }] };
+      teacherQuery = {
+        $or: [
+          { "teacher._id": teacher._id },
+          { "teacher._id": "" + teacher._id },
+        ],
+      };
     } else if (typeof teacher === typeof new ObjectId()) {
-        teacherQuery = { $or: [{ "teacher._id": teacher }, { "teacher._id": "" + teacher }] };
+      teacherQuery = {
+        $or: [{ "teacher._id": teacher }, { "teacher._id": "" + teacher }],
+      };
     } else {
-        teacherQuery["teacher.nama"] = { $regex: teacher, $options: "i" };
+      teacherQuery["teacher.nama"] = { $regex: teacher, $options: "i" };
     }
-    await this.col().find(teacherQuery).toArray().then((result) => {
-      console.log(result,"AAAAAAAAAAAAAAAAS");
+    await this.col()
+      .find(teacherQuery)
+      .toArray()
+      .then((result) => {
+        console.log(result, "AAAAAAAAAAAAAAAAS");
+      });
+
+    Object.keys(teacherQuery).forEach((item) => {
+      console.log(teacherQuery[item]);
     });
 
-    Object.keys(teacherQuery).forEach((item)=>{
-      console.log(teacherQuery[item]);
-    })
-    
     // Build the date range query part
     const dateRangeQuery = {
-        $or: [
-            // { createAt: { $gte: startDate, $lt: endDate } },
-            { updateAt: { $gte: startDate, $lt: endDate } }
-        ]
+      $or: [
+        // { createAt: { $gte: startDate, $lt: endDate } },
+        { updateAt: { $gte: startDate, $lt: endDate } },
+      ],
     };
 
-    Object.keys(dateRangeQuery).forEach((item)=>{
+    Object.keys(dateRangeQuery).forEach((item) => {
       console.log(dateRangeQuery[item]);
-    })
+    });
 
     // Combine both queries using $and
     const query = {
-        $and: [teacherQuery, dateRangeQuery]
+      $and: [teacherQuery, dateRangeQuery],
     };
-    
+
     console.log("GURU TYPE", typeof teacher);
     console.log("GURU", teacher);
-    
-    
+
     console.log(startDate);
     console.log(endDate);
-    
-    return await this.col()
-        .find(query)
-        .toArray();
+
+    return await this.col().find(query).toArray();
   }
 
   static async findOne(obj) {
@@ -82,7 +95,11 @@ export default class JurnalGuru {
 
   static async create(obj) {
     Object.keys(obj).forEach((key) => {
-      if (obj[key] && typeof obj[key]!=='string' && Object.keys(obj[key]).length > 0) {
+      if (
+        obj[key] &&
+        typeof obj[key] !== "string" &&
+        Object.keys(obj[key]).length > 0
+      ) {
         obj[key]._id = new ObjectId(obj[key]._id);
       }
     });
@@ -94,14 +111,18 @@ export default class JurnalGuru {
       filter._id = new ObjectId(filter._id);
     }
     Object.keys(update["$set"]).forEach((key) => {
-      if (update["$set"][key] && typeof update["$set"][key]!=='string' && Object.keys(update["$set"][key]).length > 0) {
+      if (
+        update["$set"][key] &&
+        typeof update["$set"][key] !== "string" &&
+        Object.keys(update["$set"][key]).length > 0
+      ) {
         update["$set"][key]._id = new ObjectId(update["$set"][key]._id);
       }
     });
     return await this.col().updateOne(filter, update);
   }
-  static async updateMany(filter, update){
-    if (filter._id){
+  static async updateMany(filter, update) {
+    if (filter._id) {
       filter._id = new ObjectId(filter._id);
     }
     return await this.col().updateMany(filter, update);

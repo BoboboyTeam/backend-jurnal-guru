@@ -81,10 +81,10 @@ router.get('/teacher/filter/jurnal-teacher/date',authentication, Authorization.t
 // JP
 router.get('/teacher/jp', filterByDay,authentication, Authorization.teacher, JPController.findAll);
 router.get('/teacher/jp/:id', filterByDay,authentication, Authorization.teacher, JPController.findOne);
+router.get('/teacher/myjp',filterByDay,authentication, Authorization.teacher, JPController.findAllByTeacher)
 
 // Jurnal Guru
 router.get('/teacher/jurnal-teacher/now',filterByRange,authentication, Authorization.teacher, JurnalGuruController.findNow);
-router.get('/teacher/filter/jurnal-teacher/date',authentication, Authorization.teacher, JurnalGuruController.findAllByRangeDate);
 router.get('/teacher/jurnal-teacher',authentication, Authorization.teacher, JurnalGuruController.findAll);
 router.get('/teacher/jurnal-teacher/:id',authentication, Authorization.teacher, JurnalGuruController.findOne);
 router.post('/teacher/jurnal-teacher',authentication, Authorization.teacher, JurnalGuruController.create);

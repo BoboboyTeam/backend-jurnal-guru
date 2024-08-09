@@ -29,6 +29,10 @@ class JPController {
           ? res.status(200).json(jp)
           : res.status(404).json({ message: "Data not found" });
       } else if (req.user.role.toLowerCase() === "teacher") {
+        
+        // Hapus ini Jika ingin sesuai dengan nama gurunya 
+        req.user.nama=""
+
         const jp = await JP.findAllByGuruAndHari(req.user.nama, req.user.hari);
         console.log(jp, "jp");
         console.log(req.user.nama, req.user.hari);
@@ -40,6 +44,45 @@ class JPController {
       next(err);
     }
   }
+
+  static async findAllByTeacher(req, res, next) {
+    try {
+        console.log(req.query, "QUERYAAAAAAAAAAAAAAAAaaa<<");
+
+        let query = {};
+        if (req.query) {
+          if (req.query.teacher) {
+            query["teacher.nama"] = { $regex: "" + req.query.teacher, $options: "i" };
+          }
+          else{
+            query["teacher.nama"] = { $regex: "" + req.user.nama, $options: "i" };
+          }
+          if (req.query.kelas) {
+            query["kelas.nama"] = {
+              $regex: "" + req.query.kelas,
+              $options: "i",
+            };
+          }
+          if (req.query.hari) {
+            query["hari"] = { $regex: "" + req.query.hari, $options: "i" };
+          }
+          else{
+            query["hari"] = { $regex: "" + req.user.hari, $options: "i" };
+          }
+        }
+        else{
+          query["teacher.nama"] = { $regex: "" + req.user.nama, $options: "i" };
+          query["hari"] = { $regex: "" + req.user.hari, $options: "i" };
+        }
+        const jp = await JP.findAllByObj(query);
+        return res.status(200).json(jp)
+          
+      
+    } catch (err) {
+      next(err);
+    }
+  }
+
 
   static async findOne(req, res, next) {
     try {
