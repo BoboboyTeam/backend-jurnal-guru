@@ -11,6 +11,9 @@ export default class Mapel {
   static async findAll() {
     return await this.col().find({}).sort({nama:1}).collation({ locale: "en", caseLevel: true }).toArray();
   }
+  static async findByObj(obj) {
+    return await this.col().find(obj).toArray();
+  }
 
   static async findOne(obj) {
     return await this.col().findOne(obj);

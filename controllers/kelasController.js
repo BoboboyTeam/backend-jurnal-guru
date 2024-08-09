@@ -3,8 +3,17 @@ import Kelas from "../models/kelas.js";
 class KelasController {
     static async findAll(req, res, next) {
         try {
-        const kelas = await Kelas.findAll();
-        res.status(200).json(kelas);
+            let query = {};
+            if(req.query){
+                if(req.query.nama){
+                    query["nama"] = {
+                        $regex: req.query.nama, $options: "i"
+                    }
+                }
+            }
+            console.log(query,"AAAAAAAAAA");
+            const kelas = query ? await Kelas.findByObj(query) : await Kelas.findAll();
+            res.status(200).json(kelas);
         } catch (err) {
         next(err);
         }

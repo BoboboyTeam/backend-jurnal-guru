@@ -3,7 +3,16 @@ import Mapel from "../models/mapel.js";
 export default class MapelController {
     static async findAll(req, res, next) {
         try {
-        const mapel = await Mapel.findAll();
+            let query = {};
+            if(req.query){
+                if(req.query.nama){
+                    query["nama"] = {
+                        $regex: req.query.nama, $options: "i"
+                    }
+                }
+            }
+            console.log(query);
+            const mapel = query ? await Mapel.findByObj(query) : await Mapel.findAll();
         return mapel.length > 0
             ? res.status(200).json(mapel)
             : res.status(404).json({ message: "Data not found" });

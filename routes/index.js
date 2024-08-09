@@ -49,6 +49,7 @@ router.delete('/admin/jp/:id', authentication, Authorization.admin, JPController
 
 // Kelas
 router.get('/kelas',authentication, KelasController.findAll);
+router.get('/admin/kelas',authentication, KelasController.findAll);
 router.get('/kelas/:id',authentication, KelasController.findOne);
 router.post('/admin/kelas', authentication, Authorization.admin, KelasController.create);
 router.put('/admin/kelas/:id', authentication, Authorization.admin, KelasController.updateOne);
@@ -56,6 +57,7 @@ router.delete('/admin/kelas/:id', authentication, Authorization.admin, KelasCont
 
 // Mapel
 router.get('/mapel', authentication, MapelController.findAll);
+router.get('/admin/mapel', authentication, MapelController.findAll);
 router.get('/mapel/:id', authentication, MapelController.findOne);
 router.post('/admin/mapel', authentication, Authorization.admin, MapelController.create);
 router.put('/admin/mapel/:id', authentication, Authorization.admin, MapelController.updateOne);

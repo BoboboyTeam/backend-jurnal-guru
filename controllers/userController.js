@@ -6,9 +6,9 @@ class UserController {
         try {
             let query = {};
             if(req.query){
-                if(req.query.teacher){
-                    query["teacher.nama"] = {
-                        $regex: req.query.teacher, $options: "i"
+                if(req.query.nama){
+                    query["nama"] = {
+                        $regex: req.query.nama, $options: "i"
                     }
                 }
             }
