@@ -31,9 +31,8 @@ export default class JurnalGuruController {
         jurnal.updateAt = new Date(jurnal.updateAt).toDateString();
       });
       // Main Feature
-      return jurnalGuru.length > 0
-        ? res.status(200).json(jurnalGuru)
-        : res.status(404).json({ message: "Data not found" });
+      return res.status(200).json(jurnalGuru)
+       
     } catch (err) {
       next(err);
     }
