@@ -10,7 +10,6 @@ export default class JurnalGuru {
   }
 
   static async findAllByGuruId(teacherId) {
-    console.log(teacherId, "MMMMMMMMM");
     return await this.col()
       .find({
         $or: [
@@ -37,27 +36,48 @@ export default class JurnalGuru {
     if (teacher._id) {
       teacherQuery = {
         $or: [
-          { "teacher._id": teacher._id },
-          { "teacher._id": "" + teacher._id },
+          {
+            $or: [
+              { "teacher._id": teacher._id },
+              { "teacher._id": "" + teacher._id },
+            ],
+          },
+          {
+            $or: [
+              { "teacherReplacement._id": teacher._id },
+              { "teacherReplacement._id": "" + teacher._id },
+            ],
+          },
         ],
       };
     } else if (typeof teacher === typeof new ObjectId()) {
       teacherQuery = {
-        $or: [{ "teacher._id": teacher }, { "teacher._id": "" + teacher }],
+        $or: [
+          {
+            $or: [{ "teacher._id": teacher }, { "teacher._id": "" + teacher }],
+          },
+          {
+            $or: [
+              { "teacherReplacement._id": teacher },
+              { "teacherReplacement._id": "" + teacher },
+            ],
+          },
+        ],
       };
     } else {
       teacherQuery["teacher.nama"] = { $regex: teacher, $options: "i" };
+      teacherQuery["teacherReplacement.nama"] = {
+        $regex: teacher,
+        $options: "i",
+      };
     }
+    console.log(teacherQuery, "<<");
     await this.col()
       .find(teacherQuery)
       .toArray()
-      .then((result) => {
-        console.log(result, "AAAAAAAAAAAAAAAAS");
-      });
+      .then((result) => {});
 
-    Object.keys(teacherQuery).forEach((item) => {
-      console.log(teacherQuery[item]);
-    });
+    Object.keys(teacherQuery).forEach((item) => {});
 
     // Build the date range query part
     const dateRangeQuery = {
@@ -67,20 +87,12 @@ export default class JurnalGuru {
       ],
     };
 
-    Object.keys(dateRangeQuery).forEach((item) => {
-      console.log(dateRangeQuery[item]);
-    });
+    Object.keys(dateRangeQuery).forEach((item) => {});
 
     // Combine both queries using $and
     const query = {
       $and: [teacherQuery, dateRangeQuery],
     };
-
-    console.log("GURU TYPE", typeof teacher);
-    console.log("GURU", teacher);
-
-    console.log(startDate);
-    console.log(endDate);
 
     return await this.col().find(query).toArray();
   }
@@ -132,7 +144,6 @@ export default class JurnalGuru {
     if (filter._id) {
       filter._id = new ObjectId(filter._id);
     }
-    console.log(filter, "<<<<<<<<<<<<");
     return await this.col().deleteOne(filter);
   }
 }

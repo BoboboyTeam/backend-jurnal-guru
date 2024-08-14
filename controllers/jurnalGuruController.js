@@ -5,13 +5,10 @@ export default class JurnalGuruController {
   static async findAll(req, res, next) {
     try {
       let jurnalGuru;
-      console.log(req.user, "<<");
       if (req.user.role.toLowerCase() === "admin") {
         // Filter Feature
         if (req.query.teacher) {
-          console.log(req.query.teacher);
           jurnalGuru = await JurnalGuru.findAllByGuru(req.query.teacher);
-          console.log(jurnalGuru);
         } else if (req.query.kelas) {
           jurnalGuru = await JurnalGuru.findAllByObj({
             kelas: req.query.kelas,
@@ -32,7 +29,6 @@ export default class JurnalGuruController {
       });
       // Main Feature
       return res.status(200).json(jurnalGuru)
-       
     } catch (err) {
       next(err);
     }
@@ -40,10 +36,6 @@ export default class JurnalGuruController {
 
   static async findAllByRangeDate(req, res, next) {
     try {
-      console.log(
-        req.query,
-        "<<<<<<<<<<<<<<<RANGNGNGNGN<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
-      );
       const month = req.query?.month
         ? req.query?.month
         : new Date().getMonth() > 9
@@ -54,27 +46,8 @@ export default class JurnalGuruController {
       const from = req.query.from ? req.query.from : null;
       const to = req.query.to ? req.query.to : null;
 
-      console.log(
-        req.query.year ? req.query.month : new Date().getFullYear(),
-        to,
-        "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
-      );
-      console.log(
-        req.query.month,
-        req.query.year,
-        "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
-      );
-      console.log(
-        month,
-        year,
-        "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
-      );
-
       const startDate = from ? new Date(from) : new Date(`${year}-${month}`);
       const endDate = to ? new Date(to) : new Date(`${year}`, `${month}`, 1);
-
-      console.log(startDate);
-      console.log(endDate);
 
       let teacher =
         req.user.role.toLowerCase() === "admin"
@@ -86,37 +59,56 @@ export default class JurnalGuruController {
       if(req.user.role.toLowerCase() === "teacher"){
         teacher = req.user.id;
       }
-      
-      console.log(teacher ? teacher : "", "<<<<<<<<<<<<<<<<GURUURUR");
-      console.log(req.params.id, "<<");
       const jurnalGuru = await JurnalGuru.findAllByGuruDateRange(
         teacher ? teacher : "",
         startDate,
         endDate
       );
-      console.log(jurnalGuru, "<<AAAAAAAAAAAAAA");
 
       let totalJP = 0;
       let dataJP = {};
       jurnalGuru.forEach((jurnal) => {
-        console.log(
-          "" + jurnal?.teacher?._id, "===", "" + teacher,
-          "<<<<<<<<<<<<<<<"
-        );
-        console.log(
-          "" + jurnal?.teacherReplacement?._id, "===", "" + teacher,
-          "<<<<<<<AAAAAAAAAAAA<<<<<<<<"
-        );
         let condition;
-        condition = `${jurnal?.teacherReplacement?._id}` === `${teacher}`;
-        condition = condition || `${jurnal?.teacher?._id}` === `${teacher}`;
+        /*
+        cek teacher
+        jika teacher sama dengan teacher yang login maka true 
+        jika teacherReplacement sama dengan teacher yang login maka true
+
+        XOR Gate
+        0 1 |1
+        1 0 |1
+        1 1 |0
+        0 0 |0
+        + OR (A ^ B) ^ (A & B)
+        0 1 |1
+        1 0 |1
+        1 1 |0
+        0 0 |0
+
+        Wrap Not (X)
+        0 1 |0
+        1 0 |0
+        1 1 |1
+        0 0 |1
+
+        */
+        condition = `${jurnal?.teacher?._id}` === `${teacher}`;
+        if(jurnal?.teacherReplacement?._id){
+          let condition1 = `${jurnal?.teacherReplacement?._id}` === `${teacher}`;
+          let condition2 = condition || `${jurnal?.teacherReplacement?._id}` === `${teacher}`;
+
+          condition = condition1
+        }
+        /**
+         * 0 1 0
+         */
+        else{
+          condition = condition && true;
+        }
         condition = condition && !!jurnal.jumlahJP;
-        console.log(condition, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
         if (condition) {
-          console.log(jurnal.jumlahJP, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
           totalJP += parseInt(jurnal.jumlahJP);
           const monthKey = jurnal.updateAt.getMonth();
-          console.log(monthKey, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
           const jumlahJP = jurnal.jumlahJP ? parseInt(jurnal.jumlahJP) : 0;
           if (dataJP[monthKey]) {
             dataJP[monthKey]["jumlahJP"] += jumlahJP;
@@ -133,8 +125,6 @@ export default class JurnalGuruController {
         jurnal.updateAt = new Date(jurnal.updateAt).toDateString();
       });
       const gaji = totalJP * 8000;
-
-      console.log("DEBUG", dataJP);
       return jurnalGuru.length > 0
         ? res.status(200).json({
             totalJP,
@@ -162,7 +152,6 @@ export default class JurnalGuruController {
         jurnal.createAt = new Date(jurnal.createAt).toDateString();
         jurnal.updateAt = new Date(jurnal.updateAt).toDateString();
       });
-      console.log(jurnalGuru, "JURNOAL OW");
       return res.status(200).json(jurnalGuru);
     } catch (err) {
       next(err);
@@ -170,7 +159,6 @@ export default class JurnalGuruController {
   }
   static async findAllByGuruId(req, res, next) {
     try {
-      console.log(req.params.id, "<<<<<<<<<<<<<<<<<<<<<<<<<<,");
       const jurnalGuru = await JurnalGuru.findAllByGuruId(req.params.id);
       jurnalGuru?.map((jurnal) => {
         jurnal.createAt = new Date(jurnal.createAt).toDateString();
@@ -228,7 +216,6 @@ export default class JurnalGuruController {
       if (teacherReplacement?._id) {
         teacherReplacement._id = new ObjectId(teacherReplacement._id);
       }
-      console.log(req.body);
       const jurnalGuru = await JurnalGuru.create({
         hari,
         mapel,
@@ -258,9 +245,7 @@ export default class JurnalGuruController {
         );
       }
       const update = { $set: { ...req.body, updateAt: new Date() } };
-      console.log(update);
       const jurnalGuru = await JurnalGuru.updateOne(filter, update);
-      console.log(jurnalGuru);
       return jurnalGuru
         ? res.status(200).json(jurnalGuru)
         : res.status(404).json({ message: "Data not found" });
