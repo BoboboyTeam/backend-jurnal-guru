@@ -65,17 +65,11 @@ export default class JurnalGuru {
         ],
       };
     } else {
-      teacherQuery["teacher.nama"] = { $regex: teacher, $options: "i" };
-      teacherQuery["teacherReplacement.nama"] = {
-        $regex: teacher,
-        $options: "i",
-      };
+      teacherQuery["$or"] = [
+        { "teacher.nama": { $regex: teacher, $options: "i" } },
+        { "teacherReplacement.nama": { $regex: teacher, $options: "i" } },
+      ];
     }
-    console.log(teacherQuery, "<<");
-    await this.col()
-      .find(teacherQuery)
-      .toArray()
-      .then((result) => {});
 
     Object.keys(teacherQuery).forEach((item) => {});
 
