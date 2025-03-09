@@ -21,7 +21,7 @@ router.post('/pub/register', AuthController.register);
 router.get('/get-role', authentication,(req,res)=>{
     res.status(200).json({role: req.user.role});
 })
-
+router.get('/public/invoices', JurnalGuruController.invoicesAll);
 // Auth
 router.post('/login', AuthController.login);
 router.post('/register',AuthController.register);
@@ -70,9 +70,13 @@ router.post('/admin/jurnal-teacher', authentication, Authorization.admin, Jurnal
 router.put('/admin/jurnal-teacher/:id', authentication, Authorization.admin, JurnalGuruController.updateOne);
 router.delete('/admin/jurnal-teacher/:id', authentication, Authorization.admin, JurnalGuruController.deleteOne);
 
+// Extension
 router.get('/admin/filter/jurnal-teacher/date/:id',authentication, Authorization.admin, JurnalGuruController.findAllByRangeDate);
 router.get('/admin/filter/jurnal-teacher/date',authentication, Authorization.admin, JurnalGuruController.findAllByRangeDate);
 router.get('/admin/filter/jurnal-teacher/teacher/:id',authentication, Authorization.admin, JurnalGuruController.findAllByGuruId);
+
+// Other
+router.get('admin/invoices',authentication, Authorization.admin, JurnalGuruController.invoicesAll);
 
 // teacher
 // Profile
